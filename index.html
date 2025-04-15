@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Generator</title>
+
+  <!-- Profile Photo -->
+  <link rel="icon" type="image/x-icon" href="photos/your.ico" />
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&family=Audiowide&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    /* Animated gradient background */
+    html, body {
+      height: 100%; margin: 0; padding: 0;
+      overflow: hidden;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(45deg, #ff0057, #0099ff, #00ff66, #ffbf00);
+      background-size: 600% 600%;
+      animation: gradientBG 20s ease infinite;
+      color: #000;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    body.dark-mode { color: #fff; }
+
+    /* 3D canvas behind everything */
+    #bgCanvas {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+    }
+
+    /* Container to hold UI above background */
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    body.dark-mode .container {
+      background: rgba(0,0,0,0.7);
+    }
+
+    header {
+      text-align: center;
+      font-size: 3rem;
+      font-family: 'Audiowide', sans-serif;
+      margin-bottom: 20px;
+      color: inherit;
+    }
+
+    /* Top bar with scan and theme toggle */
+    .top-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .btn {
+      font-family: 'Share Tech Mono', monospace;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 15px #0ff, 0 0 30px #0ff;
+    }
+    .btn-primary { background: #00e5ff; color: #000; }
+    .btn-secondary { background: #333; color: #fff; }
+
+    /* Scanner view */
+    #qrScanner {
+      position: fixed;
+      top: 60px; right: 20px;
+      width: 300px; height: 300px;
+      display: none;
+      z-index: 200;
+      border: 3px solid #00e5ff;
+      border-radius: 8px;
+      background: #000;
+    }
+    body.dark-mode #qrScanner { border-color: #fff; }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    input, select {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      font-family: 'Share Tech Mono', monospace;
+      transition: box-shadow 0.3s;
+    }
+    input:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 10px #0ff;
+    }
+    #linkInput { width: 300px; }
+
+    /* QR Preview with hue animation */
+    #qrPreview {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      animation: qrHue 5s linear infinite;
+    }
+    @keyframes qrHue {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+    body.dark-mode #qrPreview { background: #333; }
+    #qrPreview canvas { display: block; }
+
+    #downloadBtn {
+      margin-top: 10px;
+      font-family: 'Share Tech Mono', monospace;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    #downloadBtn:hover { color: #0ff; }
+
+    /* Floating controls */
+    .floating-panel {
+      position: fixed;
+      bottom: 20px; right: 20px;
+      z-index: 20;
+      background: rgba(255,255,255,0.9);
+      padding: 15px;
+      border-radius: 12px;
+      font-family: 'Share Tech Mono', monospace;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    body.dark-mode .floating-panel {
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+    }
+    .floating-panel label {
+      display: block;
+      margin-top: 10px;
+    }
+    .floating-panel input[type="range"] { width: 100%; }
+
+    .error-section { position: relative; margin-top: 10px; }
+    .close-btn {
+      position: absolute;
+      top: 5px; right: 5px;
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    /* About section below container */
+    section {
+      position: relative;
+      z-index: 10;
+      max-width: 800px;
+      margin: 20px auto;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      font-family: 'Share Tech Mono', monospace;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    body.dark-mode section {
+      background: rgba(255,255,255,0.8);
+      color: #000;
+    }
+    
+    /* Footer styling */
+    footer {
+      text-align: center;
+      margin: 20px auto;
+      font-family: 'Share Tech Mono', monospace;
+      color: inherit;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+
+  <div class="container">
+    <header>QR Generator</header>
+
+    <div class="top-bar">
+      <button id="scannerBtn" class="btn btn-primary"><i class="fas fa-qrcode"></i> Scan</button>
+      <button id="themeToggle" class="btn btn-secondary"><i class="fas fa-moon"></i></button>
+    </div>
+
+    <!-- Scanner View -->
+    <div id="qrScanner"></div>
+
+    <main>
+      <div class="input-group">
+        <input type="text" id="linkInput" placeholder="Enter URL here..." />
+        <select id="styleSelect">
+          <option value="square">Square</option>
+          <option value="dots">Dots</option>
+        </select>
+        <!-- Generate Button added -->
+        <button id="generateBtn" class="btn btn-primary">Generate</button>
+      </div>
+      <div id="qrPreview"></div>
+      <a id="downloadBtn" href="#" download="QRCode.png">Download</a>
+    </main>
+  </div>
+
+  <div class="floating-panel">
+    <label><input type="checkbox" id="autoGenToggle" checked /> Auto-generate</label>
+    <label>QR Size: <input type="range" id="qrSizeSlider" min="100" max="500" value="256" /></label>
+    <div class="error-section">
+      <button id="errorCloseBtn" class="close-btn" title="Close">&times;</button>
+      <label>Error Correction:
+        <select id="errorLevel">
+          <option value="L">L (Low)</option>
+          <option value="M">M (Medium)</option>
+          <option value="Q">Q (Quartile)</option>
+          <option value="H" selected>H (High)</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <section>
+    <h2>About Us</h2>
+    <p>This advanced QR Generator offers:</p>
+    <ul>
+      <li>🔮 Real-time QR preview</li>
+      <li>🌗 Dark/Light theme toggle</li>
+      <li>⚡ Smooth holographic animations</li>
+      <li>📱 Built-in scanner for instant reads</li>
+      <li>🌈 Unique colorful QR effect</li>
+    </ul>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>By Janak</p>
+    <p>Contact us: janakawasthi96@gmail.com</p>
+  </footer>
+
+  <script>
+    // 3D Background Simulation
+    const canvas3D = document.getElementById('bgCanvas');
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas3D, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 2;
+    const geometry = new THREE.TorusKnotGeometry(0.5, 0.2, 100, 16);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00e5ff, wireframe: true });
+    const knot = new THREE.Mesh(geometry, material);
+    scene.add(knot);
+    function animate() {
+      requestAnimationFrame(animate);
+      knot.rotation.x += 0.01;
+      knot.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate();
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    });
+
+    // Theme Toggle
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const icon = document.querySelector('#themeToggle i');
+      icon.classList.toggle('fa-moon'); 
+      icon.classList.toggle('fa-sun');
+    });
+
+    // Close Error Section
+    $('#errorCloseBtn').on('click', () => $('.error-section').hide());
+
+    // QR Generation
+    function generateQR() {
+      let link = $('#linkInput').val().trim();
+      // Auto-correct URL if protocol missing
+      if (!/^https?:\/\//i.test(link)) {
+        link = 'https://' + link;
+      }
+      // Validate the corrected link
+      if (!/^(ftp|http|https):\/\/[^ "']+$/i.test(link)) { return; }
+      $('#qrPreview').empty();
+      const size = parseInt($('#qrSizeSlider').val());
+      const level = $('#errorLevel').val();
+      const qrDiv = document.createElement('div');
+      new QRCode(qrDiv, {
+        text: link,
+        width: size,
+        height: size,
+        colorDark: '#000',
+        colorLight: '#fff',
+        correctLevel: QRCode.CorrectLevel[level]
+      });
+      $('#qrPreview').append(qrDiv);
+      setTimeout(() => {
+        const c = qrDiv.querySelector('canvas');
+        if (c) $('#downloadBtn').attr('href', c.toDataURL());
+      }, 100);
+    }
+
+    // Auto-generate on input
+    $('#linkInput').on('input', () => { 
+      if ($('#autoGenToggle').is(':checked')) generateQR(); 
+    });
+    $('#qrSizeSlider, #errorLevel, #styleSelect').on('input change', () => { 
+      if ($('#autoGenToggle').is(':checked')) generateQR(); 
+    });
+    // Generate button click event
+    $('#generateBtn').on('click', generateQR);
+
+    // QR Scanner
+    const qrScanner = new Html5Qrcode('qrScanner');
+    let scanning = false;
+    $('#scannerBtn').on('click', () => {
+      if (scanning) {
+        qrScanner.stop().then(() => { $('#qrScanner').hide(); scanning = false; });
+      } else {
+        $('#qrScanner').show();
+        qrScanner.start({ facingMode: 'environment' }, { fps: 10, qrbox: 250 },
+          decoded => { alert('Scanned: ' + decoded); qrScanner.stop(); $('#qrScanner').hide(); scanning = false; },
+          err => console.warn(err)
+        );
+        scanning = true;
+      }
+    });
+  </script>
+</body>
+</html>
