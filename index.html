@@ -664,7 +664,11 @@
             const downloadLink = `<a id="download-qr" href="${qrCodeUrl}" download="qrcode.png">Download QR Code</a>`;
             qrCodeOutput.innerHTML = `<img src="${qrCodeUrl}" alt="QR Code"><br>${downloadLink}`;
         }
-<amp-ad width="100vw" height="320"
+
+        // Initial state: Show only the home page
+        showPage('home');
+    </script>
+    <amp-ad width="100vw" height="320"
      type="adsense"
      data-ad-client="ca-pub-6126558809611102"
      data-ad-slot="6303312177"
@@ -672,9 +676,5 @@
      data-full-width="">
   <div overflow=""></div>
 </amp-ad>
-
-        // Initial state: Show only the home page
-        showPage('home');
-    </script>
 </body>
 </html>
