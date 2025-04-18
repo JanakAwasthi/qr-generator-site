@@ -1,680 +1,1954 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>linktoQR</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6126558809611102"
-            crossorigin="anonymous"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'google.com, pub-6126558809611102, DIRECT, f08c47fec0942fa0');
-    </script>
+
+    <title>linktoQR.me - Free Online QR Generator, Image Compressor, Resizer & More</title>
+    <meta name="description" content="linktoQR.me offers free online tools: QR Code Generator, Image Compressor (to KB/MB), Image Resizer, ID Card Merger, Format Converter, and more. No uploads required, process files directly in your browser for free!">
+    <meta name="keywords" content="free qr code generator, image compressor free, compress image to kb, compress image to mb, image resizer online free, id card merger, image format converter, online tools, document tools free, linktoqr">
+
     <meta name="google-adsense-account" content="ca-pub-6126558809611102">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6126558809611102"
+     crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
     <style>
+        /* --- Global Styles & Variables --- */
         :root {
-            --primary-color: #007bff;
-            --secondary-color: #28a745;
-            --accent-color: #ffc107;
-            --background-color: #f8f9fa;
+            --primary-color: #6a11cb; /* Deeper Purple */
+            --secondary-color: #2575fc; /* Vibrant Blue */
+            --accent-color: #00d2ff; /* Bright Cyan */
+            --action-color: #4caf50; /* Green for Downloads */
+            --action-hover-color: #66bb6a;
             --text-color: #333;
-            --button-text-color: white;
+            --light-text-color: #f8f8f8;
+            --bg-color: #f4f7fc; /* Lighter blueish background */
+            --card-bg: #ffffff;
+            --border-radius: 10px; /* Slightly more rounded */
+            --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            --transition-speed: 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth; /* Enable smooth scrolling */
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--background-color);
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Changed font */
+            line-height: 1.7; /* Slightly more line spacing */
+            background-color: var(--bg-color);
             color: var(--text-color);
-            overflow-x: hidden;
-            transition: background-color 0.5s ease;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 30px auto;
-            background-color: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transition: box-shadow 0.3s ease;
-        }
-
-        .container:hover {
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Homepage Styles */
-        #home-container h1 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 30px;
-            animation: fadeInDown 1s ease-out;
-        }
-
-        .home-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(5px);
-        }
-
-        .home-button {
-            background-color: var(--primary-color);
-            color: var(--button-text-color);
-            border: none;
-            padding: 25px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 18px;
-            text-align: center;
-            text-decoration: none;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 180px;
-            transition: transform 0.2s ease-in-out, background-color 0.3s ease;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        .home-button:hover {
-            transform: scale(1.05);
-            background-color: #0056b3;
-        }
-
-        /* Page Header Styles */
-        .page-header {
+        /* --- Navigation --- */
+        nav {
+            background: linear-gradient(100deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-text-color);
+            padding: 0.8rem 1rem; /* Reduced padding slightly for mobile */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
         }
 
-        .return-home, .close-page {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-            color: var(--text-color);
+        nav .logo {
+            font-size: 1.7rem; /* Adjusted for mobile */
+            font-weight: 700; /* Bolder */
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        nav .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        nav .nav-links li {
+            margin-left: 0.8rem; /* Adjusted spacing */
+        }
+
+        nav .nav-links a {
+            color: var(--light-text-color);
             text-decoration: none;
-            transition: color 0.3s ease;
+            font-weight: 500;
+            padding: 0.6rem 0.8rem; /* Adjusted padding */
+            border-radius: 20px; /* Pill shape links */
+            transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.9rem; /* Slightly smaller font for mobile nav */
+        }
+         nav .nav-links a::before { /* Subtle hover underline effect */
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: width var(--transition-speed);
         }
 
-        .return-home:hover, .close-page:hover {
-            color: var(--primary-color);
+        nav .nav-links a:hover,
+        nav .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        nav .nav-links a:hover::before,
+        nav .nav-links a.active::before {
+             width: 70%; /* Animate underline width */
         }
 
-        .close-page {
-            font-size: 24px;
-            font-weight: bold;
+        /* --- Main Content Area --- */
+        main {
+            flex: 1;
+            padding: 1.5rem 1rem; /* Adjusted padding for mobile */
+            max-width: 1200px;
+            margin: 1rem auto; /* Adjusted margin */
+            width: 100%; /* Ensure it uses available width */
         }
 
-        /* Generate QR Page Styles */
-        #generate-qr-container, #scan-qr-container, #terms-privacy-container, #about-us-container {
-            display: none;
-            animation: fadeInUp 0.5s ease-out;
+        /* --- Page Sections --- */
+        .page {
+            display: none; /* Hidden by default */
+            background-color: var(--card-bg);
+            padding: 1.5rem; /* Default mobile padding */
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            animation: fadeIn 0.6s ease-out; /* Slightly slower fade */
+            margin-bottom: 2rem; /* Spacing between sections */
+            border-top: 5px solid var(--secondary-color); /* Top border accent */
+        }
+        .page h2 { /* Style main tool titles */
+             font-size: 1.6rem; /* Adjusted for mobile */
+             color: var(--primary-color);
+             margin-bottom: 0.5rem;
+             font-weight: 600;
+        }
+         .page .tool-description { /* Intro text */
+            font-size: 0.95rem; /* Adjusted for mobile */
+            color: #555;
+            margin-bottom: 1.5rem; /* Adjusted spacing */
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+         }
+         .page .tool-description strong { /* Highlight "free" */
+             color: var(--action-color);
+             font-weight: 700;
+         }
+
+        .page.active {
+            display: block; /* Shown when active */
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .form-group label {
+        /* --- Tool Page Layout --- */
+        .tool-container {
+            display: grid;
+            /* Default to single column for mobile-first */
+            grid-template-columns: 1fr;
+            gap: 1.5rem; /* Adjusted gap */
+            align-items: start;
+        }
+
+        .tool-controls, .tool-output, .tool-example {
+            background-color: #fdfdff; /* Slightly off-white */
+            padding: 1.5rem; /* Adjusted padding */
+            border-radius: var(--border-radius);
+            border: 1px solid #e8eaf6; /* Softer border */
+            transition: box-shadow var(--transition-speed);
+        }
+         .tool-controls:hover, .tool-output:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+         }
+
+
+        .tool-controls h3, .tool-output h3, .tool-example h3 {
+            margin-bottom: 1.2rem; /* Adjusted spacing */
+            color: var(--secondary-color); /* Use secondary color */
+            border-bottom: 3px solid var(--accent-color); /* Thicker accent line */
+            padding-bottom: 0.6rem;
+            font-size: 1.2rem; /* Adjusted size */
+            font-weight: 600;
+        }
+
+        /* --- Form Elements --- */
+        label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 0.6rem; /* Increased spacing */
+            font-weight: 600;
+            color: #444; /* Slightly darker label */
+            font-size: 0.9rem; /* Adjusted size */
+        }
+
+        input[type="text"],
+        input[type="url"],
+        input[type="number"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.8rem; /* Adjusted padding */
+            margin-bottom: 1rem; /* Adjusted spacing */
+            border: 1px solid #d0d9e8; /* Softer border */
+            border-radius: 6px; /* Smaller radius */
+            font-size: 0.95rem; /* Adjust font size */
+            background-color: #fff;
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+        }
+        input[type="file"] {
+            padding: 0.5rem; /* Adjust file input padding */
+            cursor: pointer;
+        }
+         input[type="file"]::file-selector-button { /* Style file input button */
             font-weight: bold;
-            color: var(--text-color);
+            color: var(--primary-color);
+            padding: 0.6em 1em;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            background-color: #f4f7fc;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            margin-right: 1rem;
+        }
+         input[type="file"]::file-selector-button:hover {
+            background-color: #e8eaf6;
         }
 
-        .form-group input[type="text"] {
-            width: calc(100% - 16px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
 
-        .form-group input[type="text"]:focus {
-            border-color: var(--primary-color);
+        input[type="text"]:focus,
+        input[type="url"]:focus,
+        input[type="number"]:focus,
+        input[type="file"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--secondary-color); /* Use secondary color for focus */
+            box-shadow: 0 0 8px rgba(37, 117, 252, 0.2); /* Blueish shadow */
             outline: none;
         }
 
-        .form-group button {
-            background-color: var(--secondary-color);
-            color: var(--button-text-color);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
+        input[type="range"] {
+            width: 100%;
+            margin-bottom: 0.5rem;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+            accent-color: var(--secondary-color); /* Style range slider */
+        }
+        .range-value { /* Display range value next to label */
+             font-weight: bold;
+             color: var(--primary-color);
+             font-size: 0.9em;
         }
 
-        .form-group button:hover {
-            background-color: #1e7e34;
-            transform: scale(1.02);
+        .input-group { /* Grouping for KB/MB input */
+            display: flex;
+            flex-direction: column; /* Stack vertically on mobile */
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            align-items: stretch; /* Stretch children */
+        }
+        .input-group input[type="number"] { margin-bottom: 0; flex-grow: 1; }
+        .input-group select { margin-bottom: 0; width: 100%; padding: 0.8rem; /* Ensure consistent padding */}
+
+
+        button {
+            display: inline-block;
+            background: linear-gradient(100deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-text-color);
+            border: none;
+            padding: 0.8rem 1.5rem; /* Adjusted padding */
+            border-radius: 30px; /* More rounded */
+            cursor: pointer;
+            font-size: 1rem; /* Adjusted size */
+            font-weight: 600;
+            transition: all var(--transition-speed); /* Animate all properties */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%; /* Make buttons full width on mobile */
+             max-width: 300px; /* Optional max-width on larger screens */
+             display: block; /* Ensure it takes full width */
+             margin-left: auto;
+             margin-right: auto;
         }
 
-        #qrcode-output {
-            margin-top: 25px;
+
+        button:hover {
+            background: linear-gradient(100deg, var(--secondary-color), var(--primary-color)); /* Swap gradient on hover */
+            transform: translateY(-3px) scale(1.02); /* Lift and slightly enlarge */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        button:disabled {
+            background: #bdc3c7; /* Grey out disabled */
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+             opacity: 0.7;
+        }
+
+        /* --- Output & Preview Areas --- */
+        .output-area {
+            margin-top: 1.5rem;
+            padding: 1rem; /* Adjusted padding */
+            background-color: #f0f4f8; /* Light background for output */
+            border-radius: var(--border-radius);
+            min-height: 150px; /* Taller min-height */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #dfe6f1; /* Softer border */
             text-align: center;
-            border: 1px dashed #ccc;
-            padding: 20px;
-            border-radius: 8px;
         }
 
-        #qrcode-output img {
+        .output-area img,
+        .output-area canvas,
+        #qr-code-display {
             max-width: 100%;
             height: auto;
+            margin-bottom: 1rem; /* Adjusted spacing */
+            border: 1px solid #dbe2ec;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Subtle shadow */
+             border-radius: 5px;
         }
 
-        #download-qr {
-            display: inline-block;
-            margin-top: 15px;
-            background-color: var(--primary-color);
-            color: var(--button-text-color);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            text-decoration: none;
-            transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+        #qr-code-display {
+             padding: 10px; /* Adjusted padding */
+             display: inline-block; /* Prevent stretching */
+             background-color: #fff;
+             border-radius: 8px;
+             width: 180px; /* Adjusted size */
+             height: 180px;
         }
 
-        #download-qr:hover {
-            background-color: #0056b3;
-            transform: scale(1.02);
+        .output-details {
+            font-size: 0.85rem; /* Adjusted size */
+            color: #555;
+            text-align: left;
+            width: 100%;
+            border-top: 1px solid #dfe6f1;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            line-height: 1.5; /* Better readability */
+        }
+        .output-details p { margin-bottom: 0.5rem; }
+        .output-details strong { color: var(--primary-color); font-weight: 600;}
+        .output-details span { color: #333; } /* Value color */
+        .output-details .highlight { /* Highlight size differences */
+            font-weight: bold;
+            color: var(--action-color);
         }
 
-        .error-message {
-            color: red;
-            margin-top: 5px;
-            font-size: 14px;
-        }
 
-        /* Scan QR Page Styles */
-        #scan-qr-controls {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 15px;
-            flex-direction: column;
+        .download-button {
+            margin-top: 1rem; /* Adjusted spacing */
+            background: linear-gradient(100deg, var(--action-color), var(--action-hover-color)); /* Green gradient */
+            padding: 0.8rem 1.5rem; /* Match other buttons */
+            font-size: 1rem;
+            max-width: 300px; /* Match other buttons */
+             width: 100%; /* Full width */
+             display: block;
+             margin-left: auto;
+             margin-right: auto;
         }
+        /* Inherit hover/disabled styles from general button */
 
-        #scan-qr-controls button, #scan-qr-controls input[type="file"] {
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
+
+        /* --- Specific Tool Styling --- */
+        #id-merger-canvas {
             border: 1px solid #ccc;
-            background-color: #eee;
-            transition: background-color 0.3s ease;
-        }
-
-        #scan-qr-controls button:hover, #scan-qr-controls input[type="file"]:hover {
-            background-color: #ddd;
-        }
-
-        #scan-qr-controls input[type="file"] {
-            padding: 8px;
-        }
-
-        #scan-video-container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto 15px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        #scan-video {
             display: block;
-            width: 100%;
-            aspect-ratio: 1;
-            object-fit: cover;
+            margin: 1rem auto;
         }
 
-        #scan-result {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background-color: #f9f9f9;
-            white-space: pre-wrap;
-            word-break: break-all;
-            font-size: 16px;
+        /* --- Example Sections --- */
+        .tool-example {
+            background-color: #e9effa; /* Different background for example */
+            border-left: 5px solid var(--accent-color); /* Accent border */
+            padding: 1rem; /* Adjusted padding */
+        }
+         .tool-example h3 {
+             font-size: 1.1rem; /* Adjusted size */
+         }
+        .tool-example img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-top: 1rem;
+            border: 1px solid #dbe2ec;
+             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .tool-example p {
+            font-size: 0.85rem; /* Adjusted size */
+            color: #555; /* Darker text for example */
+            margin-top: 0.5rem;
+            line-height: 1.5;
         }
 
-        #copy-result {
-            background-color: var(--secondary-color);
-            color: var(--button-text-color);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 15px;
-            transition: background-color 0.3s ease, transform 0.2s ease-in-out;
-        }
-
-        #copy-result:hover {
-            background-color: #1e7e34;
-            transform: scale(1.02);
-        }
-
-        /* About Us Page Styles */
-        .email-button {
-            background-color: #007bff;
-            color: var(--button-text-color);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 15px;
-            transition: background-color 0.3s ease, transform 0.2s ease-in-out;
-        }
-
-        .email-button:hover {
-            background-color: #0056b3;
-            transform: scale(1.02);
-        }
-
-        /* Advanced Colors and Simulations */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #4b0082, #008080, #d2691e, #4b0082);
-            background-size: 400% 400%;
-            animation: gradientAnimation 10s ease infinite;
-            z-index: -1;
-        }
-
-        @keyframes gradientAnimation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            .container {
-                margin: 15px;
-                padding: 20px;
-            }
-
-            .home-buttons {
-                grid-template-columns: 1fr;
-                gap: 15px;
-                padding: 15px;
-            }
-
-            .home-button {
-                height: auto;
-                padding: 15px;
-                font-size: 16px;
-            }
-
-            .page-header {
-                margin-bottom: 15px;
-            }
-
-            .return-home, .close-page {
-                font-size: 16px;
-            }
-
-            .close-page {
-                font-size: 20px;
-            }
-
-            #scan-qr-controls {
-                flex-direction: column;
-            }
-        }
-
-        /* How to Use and Advantages Section */
-        .usage-advantages {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(5px);
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .usage-advantages h2 {
+        /* --- Home Page --- */
+         #home-page h1 {
             color: var(--primary-color);
-            margin-bottom: 15px;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 2.2rem; /* Adjusted size */
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+         #home-page p.intro { /* Specific class for intro para */
+            text-align: center;
+            font-size: 1rem; /* Adjusted size */
+            color: #555;
+            margin-bottom: 2rem; /* Adjusted space */
+            max-width: 90%; /* Allow more width on mobile */
+            margin-left: auto;
+            margin-right: auto;
+         }
+
+        .features-grid {
+            display: grid;
+             /* Stack on mobile */
+            grid-template-columns: 1fr;
+            gap: 1.5rem; /* Adjusted gap */
+            margin-top: 2rem; /* Adjusted space */
         }
 
-        .usage-advantages h3 {
-            color: var(--secondary-color);
-            margin-top: 20px;
-            margin-bottom: 10px;
+        .feature-card {
+            background-color: #fff;
+            padding: 1.5rem; /* Adjusted padding */
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            text-align: center;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed), border-color var(--transition-speed);
+            cursor: pointer;
+            border-top: 5px solid transparent; /* Prepare for hover border */
+             border-bottom: 5px solid var(--accent-color); /* Accent border */
         }
 
-        .usage-advantages p {
-            line-height: 1.7;
-            margin-bottom: 15px;
+        .feature-card:hover {
+            transform: translateY(-5px); /* Reduced lift */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); /* Adjusted shadow */
+            border-top-color: var(--secondary-color); /* Show border on hover */
         }
 
-        .usage-advantages ul {
-            list-style-type: disc;
-            padding-left: 25px;
-            margin-bottom: 15px;
+        .feature-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.6rem; /* Adjusted spacing */
+            font-size: 1.2rem; /* Adjusted size */
+             font-weight: 600;
         }
 
-        .usage-advantages li {
+        .feature-card p {
+            font-size: 0.9rem; /* Adjusted size */
+            color: #666;
             line-height: 1.6;
         }
+
+         /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 1.5rem 1rem; /* Adjusted padding */
+            margin-top: 2rem; /* Adjusted spacing */
+            background-color: #34495e; /* Dark footer */
+            color: #ecf0f1; /* Light text */
+            font-size: 0.85rem; /* Adjusted size */
+        }
+        footer a {
+            color: var(--accent-color); /* Bright link color */
+            text-decoration: none;
+            font-weight: 500;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Helper Classes --- */
+        .hidden { display: none !important; }
+        .loader {
+            border: 5px solid #f3f3f3; /* Light grey */
+            border-top: 5px solid var(--secondary-color); /* Blue */
+            border-radius: 50%;
+            width: 35px; /* Adjusted size */
+            height: 35px;
+            animation: spin 1.2s linear infinite;
+            margin: 1rem auto; /* Adjusted margin */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- AdSense Ad Unit Styling --- */
+        /* Style the container for ad units */
+        .ad-container {
+            margin: 1.5rem auto; /* Center and space out ad units */
+            padding: 0;
+            text-align: center; /* Center the ad content */
+            min-height: 50px; /* Minimum height to prevent layout collapse before ad loads */
+             /* background-color: #f0f0f0; */ /* Optional: Light background for testing */
+             /* border: 1px dashed #ccc; */ /* Optional: Border for testing */
+            width: 100%; /* Take full width of container */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Ensure AdSense 'ins' tag behaves correctly */
+        .adsbygoogle {
+            display: block; /* Default AdSense style, ensure it's set */
+            background-color: transparent; /* Ensure no conflicting background */
+        }
+
+
+        /* Responsive adjustments (Desktop and Larger Screens) */
+        @media (min-width: 769px) {
+            nav {
+                 padding: 0.8rem 2rem; /* Restore desktop padding */
+            }
+             nav .logo { font-size: 1.9rem; }
+             nav .nav-links li { margin-left: 1.2rem; }
+             nav .nav-links a { font-size: 1rem; padding: 0.6rem 1rem;}
+
+             main {
+                 padding: 2rem;
+                 margin: 1.5rem auto;
+            }
+             .page {
+                 padding: 2rem 2.5rem;
+             }
+            .page h2 { font-size: 1.8rem; }
+             .page .tool-description { font-size: 1rem; }
+             .tool-container {
+                 grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* 2-3 columns on desktop */
+                 gap: 2rem;
+            }
+            .tool-controls h3, .tool-output h3, .tool-example h3 { font-size: 1.3rem; }
+             label { font-size: 0.95rem; }
+             input[type="text"], input[type="url"], input[type="number"], input[type="file"], select, textarea { font-size: 1rem; padding: 0.9rem; margin-bottom: 1.2rem;}
+             .input-group { flex-direction: row; align-items: center; } /* Row layout on desktop */
+             .input-group select { width: auto; padding: 0.9rem; }
+
+             button { width: auto; display: inline-block; } /* Auto width buttons on desktop */
+             .download-button { width: auto; display: inline-block;}
+
+             #home-page h1 { font-size: 2.8rem; }
+             #home-page p.intro { font-size: 1.15rem; max-width: 750px; }
+             .features-grid {
+                 grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* Multi-column grid */
+             }
+            .feature-card h3 { font-size: 1.3rem; }
+             .feature-card p { font-size: 0.95rem; }
+
+              #qr-code-display {
+                 width: 220px;
+                 height: 220px;
+                 margin-bottom: 1.5rem;
+             }
+              .output-details { font-size: 0.9rem; }
+             .tool-example { padding: 1.8rem; }
+             .tool-example h3 { font-size: 1.3rem; }
+             .tool-example p { font-size: 0.9rem; }
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <div id="home-container">
-            <h1>linktoQR</h1>
-            <div class="home-buttons">
-                <a href="#" class="home-button" onclick="showPage('generate-qr')">Generate QR</a>
-                <a href="#" class="home-button" onclick="showPage('scan-qr')">Scan QR</a>
-                <a href="#" class="home-button" onclick="showPage('terms-privacy')">Terms and Privacy Policy</a>
-                <a href="#" class="home-button" onclick="showPage('about-us')">About Us</a>
-            </div>
 
-            <div style="margin-top: 20px; text-align: center;">
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-6126558809611102"
-                     data-ad-slot="Your_Ad_Slot_Here"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-                <script>
-                     (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-            </div>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6126558809611102"
-     crossorigin="anonymous"></script>
-<!-- ADD -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-6126558809611102"
-     data-ad-slot="6303312177"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-            <div class="usage-advantages">
-                <h2>Unlock the Power of QR Codes with linktoQR</h2>
-                <p>Welcome to linktoQR, your ultimate solution for seamless QR code generation and scanning. Our platform is designed with simplicity and efficiency in mind, providing you with all the tools you need to interact with QR codes effortlessly.</p>
+    <nav>
+        <div class="logo">linktoQR.me</div> <ul class="nav-links">
+            <li><a href="#home" class="nav-link active" data-page="home-page">Home</a></li>
+            <li><a href="#qr-code" class="nav-link" data-page="qr-code-page">QR</a></li>
+            <li><a href="#compressor" class="nav-link" data-page="image-compressor-page">Compress</a></li>
+            <li><a href="#resizer" class="nav-link" data-page="image-resizer-page">Resize</a></li>
+            <li><a href="#id-merger" class="nav-link" data-page="id-merger-page">Merge</a></li>
+            <li><a href="#format-converter" class="nav-link" data-page="format-converter-page">Convert</a></li>
+            <li><a href="#enhancer" class="nav-link" data-page="image-enhancer-page">Enhance</a></li>
+            <li><a href="#privacy" class="nav-link" data-page="privacy-policy-page">Privacy</a></li>
+        </ul>
+    </nav>
 
-                <h3>How to Use linktoQR:</h3>
-
-                <h4>1. Generate QR Codes:</h4>
-                <p>Creating your own QR code is just a few clicks away:</p>
-                <ul>
-                    <li>Click on the "Generate QR" button on the homepage.</li>
-                    <li>In the "Enter Link" field, type or paste the URL you want to encode. We support various formats including:
-                        <ul>
-                            <li><code>www.yourwebsite.com</code></li>
-                            <li><code>yourwebsite.com</code></li>
-                            <li><code>https://www.yourwebsite.com</code></li>
-                        </ul>
-                    </li>
-                    <li>Click the "Generate QR" button.</li>
-                    <li>Your QR code will be instantly generated and displayed. You'll also get a "Download QR Code" button to save it as a PNG image.</li>
-                    <li>If you enter a link in an unsupported format, an error message will guide you to the correct format.</li>
-                </ul>
-
-                <h4>2. Scan QR Codes:</h4>
-                <p>Scanning QR codes is quick and easy with linktoQR:</p>
-                <ul>
-                    <li>Click on the "Scan QR" button on the homepage.</li>
-                    <li>You have two options for scanning:
-                        <ul>
-                            <li><strong>Scan with Camera:</strong> Click the "Scan with Camera" button. Your device will request camera access. Once granted, point your camera at the QR code you want to scan. The scanned result will appear automatically.</li>
-                            <li><strong>Upload QR Code:</strong> Click on the "Choose File" button and select an image file containing a QR code from your device. The platform will process the image and display the scanned result.</li>
-                        </ul>
-                    </li>
-                    <li>Once the QR code is scanned, the decoded information (usually a website link or text) will be displayed in the "Scan Result" area.</li>
-                    <li>A "Copy Result" button will appear, allowing you to easily copy the scanned information to your clipboard.</li>
-                </ul>
-
-                <h3>Advantages of Using linktoQR:</h3>
-                <ul>
-                    <li><strong>User-Friendly Interface:</strong> Our website is designed to be intuitive and easy to navigate for users of all technical levels.</li>
-                    <li><strong>Versatile QR Code Generation:</strong> Generate QR codes for various types of links, ensuring broad compatibility.</li>
-                    <li><strong>Flexible Scanning Options:</strong> Scan QR codes using your device's camera or by uploading an image file, providing convenience for different situations.</li>
-                    <li><strong>Instant Results:</strong> Get your QR codes generated and scanned almost instantly, saving you valuable time.</li>
-                    <li><strong>Downloadable QR Codes:</strong> Save your generated QR codes as high-quality PNG images for easy sharing and printing.</li>
-                    <li><strong>Privacy-Focused:</strong> We prioritize your privacy. All QR code generation and scanning processes are performed locally on your device, and we do not store any personal data.</li>
-                    <li><strong>Multi-Page Design:</strong> Enjoy a clean and organized experience with dedicated pages for each function.</li>
-                    <li><strong>Mobile and Desktop Compatible:</strong> Our website is fully responsive and works seamlessly on all your devices, whether you're on a smartphone, tablet, or desktop computer.</li>
-                    <li><strong>Attractive Design:</strong> We've incorporated advanced colors and subtle animations to create a visually appealing and engaging user experience.</li>
-                </ul>
-
-                <p>Start exploring the world of QR codes with linktoQR today! Whether you're sharing information, accessing websites quickly, or discovering new content, linktoQR is your reliable companion.</p>
-            </div>
+    <div class="ad-container" id="ad-slot-top-banner">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6126558809611102"
+             crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-6126558809611102"
+             data-ad-slot="9131891151"  data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
         </div>
 
-        <div id="generate-qr-container" class="container">
-            <div class="page-header">
-                <a href="#" class="return-home" onclick="showPage('home')">Return To Home</a>
-                <button class="close-page" onclick="showPage('home')">X</button>
-            </div>
-            <h2>Generate QR Code</h2>
-            <div class="form-group">
-                <label for="qr-link">Enter Link:</label>
-                <input type="text" id="qr-link" placeholder="www.example.com">
-                <p class="error-message" id="link-error"></p>
-            </div>
-            <div class="form-group">
-                <button onclick="generateQRCode()">Generate QR</button>
-            </div>
-            <div id="qrcode-output"></div>
-        </div>
 
-        <div id="scan-qr-container" class="container">
-            <div class="page-header">
-                <a href="#" class="return-home" onclick="showPage('home')">Return To Home</a>
-                <button class="close-page" onclick="showPage('home')">X</button>
+    <main>
+        <section id="home-page" class="page active">
+             <h1>Welcome to linktoQR.me! ✨</h1>
+             <p class="intro">Your central hub for quick, easy, and <strong>free</strong> online document and image tools. Process everything directly in your browser - no uploads needed! Select a tool below to start.</p>
+            <div class="features-grid">
+                 <div class="feature-card" data-page="qr-code-page">
+                    <h3>Free QR Code Generator</h3>
+                    <p>Instantly create QR codes from text or URLs for <strong>free</strong>.</p>
+                </div>
+                <div class="feature-card" data-page="image-compressor-page">
+                    <h3>Free Image Compressor</h3>
+                    <p>Reduce JPG/PNG/WEBP file size. Compress images to specific KB/MB <strong>free</strong>.</p>
+                </div>
+                 <div class="feature-card" data-page="image-resizer-page">
+                    <h3>Free Image Resizer</h3>
+                    <p>Resize and change image dimensions (pixels) online for <strong>free</strong>.</p>
+                </div>
+                 <div class="feature-card" data-page="id-merger-page">
+                    <h3>Free ID Card Merger</h3>
+                    <p>Combine front and back of ID cards or documents onto one image/page for <strong>free</strong>.</p>
+                </div>
+                <div class="feature-card" data-page="format-converter-page">
+                    <h3>Free Format Converter</h3>
+                    <p>Convert images between JPG, PNG, WEBP formats easily and for <strong>free</strong>.</p>
+                </div>
+                <div class="feature-card" data-page="image-enhancer-page">
+                    <h3>Free Image Enhancer</h3>
+                    <p>Basic image adjustments (brightness, contrast) preview for <strong>free</strong>.</p>
+                </div>
+                <div class="feature-card" data-page="privacy-policy-page">
+                    <h3>Privacy Policy</h3>
+                    <p>Understand how your data is handled (locally).</p>
+                </div>
             </div>
-            <h2>Scan QR Code</h2>
-            <div id="scan-qr-controls">
-                <input type="file" id="qr-file" accept="image/*" onchange="scanQRCodeFromFile(this)">
-                <button id="scan-button">Scan with Camera</button>
-            </div>
-            <div id="scan-video-container" style="display: none;">
-                <video id="scan-video"></video>
-            </div>
-            <div id="scan-result"></div>
-            <button id="copy-result" style="display: none;" onclick="copyToClipboard()">Copy Result</button>
-        </div>
+             </section>
 
-        <div id="terms-privacy-container" class="container">
-            <div class="page-header">
-                <a href="#" class="return-home" onclick="showPage('home')">Return To Home</a>
-                <button class="close-page" onclick="showPage('home')">X</button>
+        <section id="qr-code-page" class="page">
+            <h2>QR Code Generator</h2>
+            <p class="tool-description">Generate QR codes from any text or URL instantly. This tool is completely <strong>free</strong> to use.</p>
+            <div class="tool-container">
+                <div class="tool-controls">
+                    <h3>Generate QR Code</h3>
+                    <label for="qr-text">Enter Text or URL:</label>
+                    <input type="text" id="qr-text" placeholder="e.g., https://linktoqr.me">
+                    <div id="qr-loader" class="loader hidden"></div>
+                </div>
+                <div class="tool-output">
+                    <h3>Output</h3>
+                    <div class="output-area">
+                        <div id="qr-code-display"><p style="font-size:0.9em; color:#888;">Enter text above</p></div>
+                        <div id="qr-output-details" class="output-details hidden">
+                            <p><strong>Input Text:</strong> <span id="qr-input-text-val"></span></p>
+                        </div>
+                         <a id="download-qr-btn" class="download-button hidden" href="#" download="qrcode.png">Download QR Code</a>
+                    </div>
+                     <div class="ad-container" id="ad-slot-qr-tool">
+                        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6126558809611102"
+                             crossorigin="anonymous"></script>
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-6126558809611102"
+                             data-ad-slot="9131891151"  data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                        <script>
+                             (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                        </div>
+                </div>
+                 <div class="tool-example">
+                     <h3>Example</h3>
+                     <p>Enter a website URL. A scannable QR code appears instantly below.</p>
+                     <img src="https://www.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/basic_market/generator/dist/generator/assets/images/websiteURL.png" alt="Example QR Code for URL">
+                     <p><em>Sample QR code pointing to a website.</em></p>
+                </div>
             </div>
-            <h2>Terms and Privacy Policy</h2>
-            <p><strong>Terms of Service:</strong></p>
-            <p>By using linktoQR, you agree to these terms. We are not responsible for any misuse of generated or scanned QR codes.</p>
-            <p><strong>Privacy Policy:</strong></p>
-            <p>We do not collect any personal information from users of linktoQR. Any data processed (like the link for QR generation or scanned QR code data) is done locally and not stored on our servers.</p>
-            <p>We may use third-party services like Google AdSense, which may have their own privacy policies. Please refer to their policies for more information.</p>
-        </div>
+        </section>
 
-        <div id="about-us-container" class="container">
-            <div class="page-header">
-                <a href="#" class="return-home" onclick="showPage('home')">Return To Home</a>
-                <button class="close-page" onclick="showPage('home')">X</button>
+        <section id="image-compressor-page" class="page">
+             <h2>Image Compressor</h2>
+             <p class="tool-description">Reduce image file size (JPG, PNG, WEBP) while balancing quality. Try compressing to a specific target size (KB/MB). Use this tool <strong>free</strong>ly.</p>
+            <div class="tool-container">
+                <div class="tool-controls">
+                    <h3>Compress Image</h3>
+                    <label for="compress-file">Upload Image (JPG, PNG, WEBP):</label>
+                    <input type="file" id="compress-file" accept="image/jpeg, image/png, image/webp">
+
+                    <label for="compress-quality">Quality (Lower = Smaller Size): <span id="compress-quality-value" class="range-value">0.8</span></label>
+                    <input type="range" id="compress-quality" min="0.1" max="1.0" step="0.05" value="0.8">
+
+                    <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #eee;">
+
+                    <label>Compress to Target Size (Approx.):</label>
+                    <div class="input-group">
+                         <input type="number" id="compress-target-size" placeholder="e.g., 100">
+                         <select id="compress-target-unit">
+                             <option value="KB">KB</option>
+                             <option value="MB">MB</option>
+                         </select>
+                    </div>
+                    <button id="compress-target-btn" disabled>Compress to Size</button>
+
+                    <div id="compress-loader" class="loader hidden"></div>
+                    <p id="compress-status" style="margin-top: 1rem; color: var(--primary-color); font-style: italic;" class="hidden"></p> </div>
+                <div class="tool-output">
+                    <h3>Output</h3>
+                    <div class="output-area">
+                        <img id="compress-preview" src="#" alt="Compressed Image Preview" class="hidden">
+                         <p id="compress-no-preview">Upload an image to start.</p>
+                        <div id="compress-output-details" class="output-details hidden">
+                            <p><strong>Original Size:</strong> <span id="compress-original-size"></span></p>
+                            <p><strong>Original Dimensions:</strong> <span id="compress-original-dims"></span></p>
+                            <p><strong>Output Size:</strong> <span id="compress-new-size" class="highlight"></span></p>
+                             <p><strong>Dimensions:</strong> <span id="compress-new-dims"></span></p>
+                             <p><strong>Quality Setting:</strong> <span id="compress-quality-setting"></span></p>
+                        </div>
+                        <a id="download-compress-btn" class="download-button hidden" href="#" download="compressed_image.jpg">Download Compressed Image</a>
+                    </div>
+                     </div>
+                 <div class="tool-example">
+                    <h3>Example</h3>
+                    <p>Upload an image. Adjust the quality slider for manual compression (updates preview in real-time after first load). Or, enter a target size (e.g., 50 KB) and click 'Compress to Size'.</p>
+                    <img src="https://via.placeholder.com/300x200.png?text=Before+Compression" alt="Placeholder Before Compression">
+                    <p><em>Result appears in Output with new size details.</em></p>
+                    <img src="https://via.placeholder.com/300x200.png?text=After+Compression+(Smaller+Size)" alt="Placeholder After Compression">
+                </div>
             </div>
-            <h2>About Us</h2>
-            <p>linktoQR is a simple and easy-to-use online tool for generating and scanning QR codes.</p>
-            <p>Contact for more.</p>
-            <a href="mailto:janakawasthi96@gmail.com" class="email-button">Email Us</a>
-            <p>By Janak</p>
-        </div>
-    </div>
+        </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/qr-scanner@1.4.2/qr-scanner.umd.min.js"></script>
+        <section id="image-resizer-page" class="page">
+             <h2>Image Resizer / Resolution Changer</h2>
+             <p class="tool-description">Change the dimensions (width and height in pixels) of your images online. Maintain aspect ratio automatically. Completely <strong>free</strong> tool.</p>
+             <div class="tool-container">
+                 <div class="tool-controls">
+                     <h3>Resize Image</h3>
+                     <label for="resize-file">Upload Image (JPG, PNG, WEBP):</label>
+                     <input type="file" id="resize-file" accept="image/jpeg, image/png, image/webp">
+
+                     <label for="resize-width">New Width (px):</label>
+                     <input type="number" id="resize-width" placeholder="e.g., 800">
+
+                     <label for="resize-height">New Height (px):</label>
+                     <input type="number" id="resize-height" placeholder="e.g., 600">
+                     <label style="display:inline-flex; align-items:center; gap: 0.5rem; margin-bottom: 1rem; width: auto;"> <input type="checkbox" id="resize-aspect-ratio" checked style="width: auto; margin-right: 5px;"> Maintain Aspect Ratio
+                     </label>
+
+                      <label for="resize-quality">Output Quality (0.1 - 1.0): <span id="resize-quality-value" class="range-value">0.85</span></label>
+                     <input type="range" id="resize-quality" min="0.1" max="1.0" step="0.05" value="0.85">
+
+                     <button id="resize-btn" disabled>Resize Image</button> <div id="resize-loader" class="loader hidden"></div>
+                 </div>
+                 <div class="tool-output">
+                     <h3>Output</h3>
+                     <div class="output-area">
+                         <img id="resize-preview" src="#" alt="Resized Image Preview" class="hidden">
+                          <p id="resize-no-preview">Upload an image to start.</p>
+                         <div id="resize-output-details" class="output-details hidden">
+                            <p><strong>Original Size:</strong> <span id="resize-original-size"></span></p>
+                            <p><strong>Original Dimensions:</strong> <span id="resize-original-dims"></span></p>
+                            <p><strong>New Size:</strong> <span id="resize-new-size" class="highlight"></span></p>
+                            <p><strong>New Dimensions:</strong> <span id="resize-new-dims" class="highlight"></span></p>
+                         </div>
+                         <a id="download-resize-btn" class="download-button hidden" href="#" download="resized_image.jpg">Download Resized Image</a>
+                     </div>
+                    </div>
+                  <div class="tool-example">
+                     <h3>Example</h3>
+                     <p>Upload image, enter desired width OR height. If 'Maintain Aspect Ratio' is checked, the other dimension adjusts automatically. Preview updates in real-time after initial resize.</p>
+                     <img src="https://via.placeholder.com/300x200.png?text=Original+Image" alt="Placeholder Original Image">
+                     <p><em>Set width to 150px. Height adjusts if ratio locked.</em></p>
+                     <img src="https://via.placeholder.com/150x100.png?text=Resized+Image" alt="Placeholder Resized Image">
+                 </div>
+             </div>
+         </section>
+
+        <section id="id-merger-page" class="page">
+             <h2>ID Card Merger</h2>
+              <p class="tool-description">Combine two images (like the front and back of an ID card) vertically onto a single image canvas. Simple, fast, and <strong>free</strong>.</p>
+             <div class="tool-container">
+                 <div class="tool-controls">
+                     <h3>Merge Images</h3>
+                     <label for="id-front-file">Upload Front Image:</label>
+                     <input type="file" id="id-front-file" accept="image/*">
+
+                     <label for="id-back-file">Upload Back Image:</label>
+                     <input type="file" id="id-back-file" accept="image/*">
+
+                     <label for="id-spacing">Spacing Between Images (px): <span id="id-spacing-value" class="range-value">20</span></label>
+                     <input type="range" id="id-spacing" min="0" max="100" value="20" step="5">
+
+                      <label for="id-output-format">Output Format:</label>
+                      <select id="id-output-format">
+                          <option value="image/jpeg">JPG</option>
+                          <option value="image/png">PNG</option>
+                           <option value="image/webp">WEBP</option>
+                      </select>
+
+                     <button id="merge-id-btn" disabled>Merge Images</button> <div id="merge-loader" class="loader hidden"></div>
+                 </div>
+                 <div class="tool-output">
+                     <h3>Output</h3>
+                     <div class="output-area">
+                         <canvas id="id-merger-canvas" class="hidden"></canvas>
+                         <img id="merge-preview" src="#" alt="Merged ID Preview" class="hidden">
+                          <p id="merge-no-preview">Upload both images to start.</p>
+                         <div id="merge-output-details" class="output-details hidden">
+                             <p><strong>Front Size:</strong> <span id="merge-front-size"></span></p>
+                             <p><strong>Back Size:</strong> <span id="merge-back-size"></span></p>
+                             <p><strong>Output Size:</strong> <span id="merge-output-size" class="highlight"></span></p>
+                             <p><strong>Output Dimensions:</strong> <span id="merge-output-dims" class="highlight"></span></p>
+                         </div>
+                         <a id="download-merge-btn" class="download-button hidden" href="#" download="merged_id.jpg">Download Merged Image</a>
+                     </div>
+                       </div>
+                 <div class="tool-example">
+                     <h3>Example</h3>
+                     <p>Upload front and back images. They appear merged below. Adjust spacing slider for real-time preview update after initial merge.</p>
+                     <img src="https://via.placeholder.com/250x150.png?text=ID+Front+Example" alt="Placeholder ID Front">
+                     <img src="https://via.placeholder.com/250x150.png?text=ID+Back+Example" alt="Placeholder ID Back" style="margin-top: 10px;">
+                     <p><em>Resulting merged image appears in Output.</em></p>
+                 </div>
+             </div>
+        </section>
+
+        <section id="format-converter-page" class="page">
+             <h2>Image Format Converter</h2>
+              <p class="tool-description">Convert your images between popular formats like JPG, PNG, and WEBP. Quick, browser-based, and <strong>free</strong>.</p>
+             <div class="tool-container">
+                 <div class="tool-controls">
+                     <h3>Convert Image Format</h3>
+                     <label for="format-file">Upload Image (Any common format):</label>
+                     <input type="file" id="format-file" accept="image/*">
+
+                     <label for="format-output">Convert To:</label>
+                     <select id="format-output">
+                         <option value="image/jpeg">JPG</option>
+                         <option value="image/png">PNG</option>
+                         <option value="image/webp">WEBP</option>
+                     </select>
+
+                     <button id="convert-format-btn" disabled>Convert Format</button>
+                      <div id="format-loader" class="loader hidden"></div>
+                 </div>
+                 <div class="tool-output">
+                     <h3>Output</h3>
+                     <div class="output-area">
+                         <img id="format-preview" src="#" alt="Converted Image Preview" class="hidden">
+                          <p id="format-no-preview">Upload an image to start.</p>
+                         <div id="format-output-details" class="output-details hidden">
+                            <p><strong>Original Size:</strong> <span id="format-original-size"></span></p>
+                            <p><strong>Original Format:</strong> <span id="format-original-type"></span></p>
+                            <p><strong>New Size:</strong> <span id="format-new-size" class="highlight"></span></p>
+                            <p><strong>New Format:</strong> <span id="format-new-type" class="highlight"></span></p>
+                         </div>
+                         <a id="download-format-btn" class="download-button hidden" href="#" download="converted_image.jpg">Download Converted Image</a>
+                     </div>
+                      </div>
+                  <div class="tool-example">
+                    <h3>Example</h3>
+                    <p>Upload a PNG image, select 'JPG' from the dropdown, and click Convert. The JPG version will appear.</p>
+                     <img src="https://via.placeholder.com/300x200.png?text=Sample+PNG+Image" alt="Placeholder PNG Image">
+                     <p><em>Resulting JPG appears in Output.</em></p>
+                </div>
+             </div>
+         </section>
+
+        <section id="image-enhancer-page" class="page">
+             <h2>Image Enhancer (Basic Adjustments)</h2>
+             <p class="tool-description">Make basic visual adjustments to your image preview using sliders for brightness, contrast, and saturation. This tool provides a <strong>free</strong> preview.</p>
+             <div class="tool-container">
+                 <div class="tool-controls">
+                    <h3>Adjust Image Preview</h3>
+                    <label for="enhance-file">Upload Image:</label>
+                    <input type="file" id="enhance-file" accept="image/*">
+
+                    <label for="enhance-brightness">Brightness: <span id="enhance-brightness-value" class="range-value">100</span>%</label>
+                    <input type="range" id="enhance-brightness" min="0" max="200" value="100">
+
+                    <label for="enhance-contrast">Contrast: <span id="enhance-contrast-value" class="range-value">100</span>%</label>
+                    <input type="range" id="enhance-contrast" min="0" max="200" value="100">
+
+                    <label for="enhance-saturate">Saturation: <span id="enhance-saturate-value" class="range-value">100</span>%</label>
+                    <input type="range" id="enhance-saturate" min="0" max="200" value="100">
+
+                     <div id="enhance-loader" class="loader hidden"></div>
+                 </div>
+                 <div class="tool-output">
+                    <h3>Preview</h3>
+                    <div class="output-area">
+                         <img id="enhance-preview" src="#" alt="Enhance Image Preview" class="hidden" style="transition: filter 0.2s ease-out;"> <p id="enhance-no-preview">Upload an image to start.</p>
+                         <div id="enhance-output-details" class="output-details hidden">
+                            <p><strong>Original Size:</strong> <span id="enhance-original-size"></span></p>
+                            <p><strong>Original Dimensions:</strong> <span id="enhance-original-dims"></span></p>
+                            <p style="color: #e74c3c; font-size: 0.9em;"><em>Adjustments are preview-only. Download is original.</em></p>
+                         </div>
+                          <a id="download-enhance-btn" class="download-button hidden" href="#" download="original_image.jpg">Download Original Image</a>
+                     </div>
+                       </div>
+                 <div class="tool-example">
+                     <h3>Example</h3>
+                     <p>Upload an image. Use the sliders to adjust the preview's look in real-time. Download the unmodified original image.</p>
+                     <img src="https://via.placeholder.com/300x200.png?text=Adjust+Preview" alt="Placeholder Adjust Image">
+                     <p><em>Sliders change the look of the preview image instantly.</em></p>
+                 </div>
+             </div>
+        </section>
+
+        <section id="privacy-policy-page" class="page">
+            <h2>Privacy Policy for linktoQR.me</h2>
+            <p><strong>Last Updated:</strong> April 18, 2025</p> <p>Welcome to linktoQR.me! Your privacy is critical to us. This policy explains how we handle information when you use our <strong>free</strong> online tools.</p>
+
+            <h3>1. Core Principle: Client-Side Processing</h3>
+            <p>All core functionalities of linktoQR.me (QR generation, image compression, resizing, merging, format conversion, basic enhancement) are designed to work entirely within your web browser using JavaScript. </p>
+            <ul>
+                <li><strong>No Server Uploads for Core Tools:</strong> Your files (images, documents) and text inputs for these tools are <strong>NOT</strong> uploaded to our servers or any third-party servers during processing.</li>
+                <li><strong>Local Processing:</strong> All calculations, manipulations, and generations happen directly on your device (computer, phone, tablet).</li>
+                <li><strong>We Don't See Your Files:</strong> Because processing is local, we do not see, access, or store the content of the files you work with using these core tools.</li>
+            </ul>
+
+            <h3>2. Information We Do Not Collect</h3>
+            <p>We do not collect or store personal information like your name, email address, or IP address through the use of the core tools. We do not track your activity across different websites.</p>
+
+             <h3>3. Cookies</h3>
+            <p>linktoQR.me does not use cookies for tracking users or collecting site usage analytics directly. We might use `localStorage` in your browser only for essential site functions, like remembering basic preferences (e.g., the last tool used), but not for collecting personal data.</p>
+
+            <h3>4. Third-Party Services</h3>
+             <ul>
+                <li><strong>Libraries (CDNs):</strong> We use reputable Content Delivery Networks (CDNs) to load necessary JavaScript libraries (like qrcode.js). While the CDN provider might log requests according to their own policies, your actual file content or QR code data is not sent to the library provider during local processing.</li>
+                 <li><strong>Advertising (Google AdSense):</strong> To support the operational costs of providing these tools for <strong>free</strong>, we display advertisements from Google AdSense. Google uses cookies to serve ads based on a user's prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads based on your visit to this site and/or other sites on the Internet. Users may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ad Settings</a>. Please review <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">Google's Advertising Privacy & Terms</a> for more information on how Google collects and uses data.</li>
+            </ul>
+
+
+            <h3>5. Security</h3>
+             <p>Since your files are processed locally for the core tools, the security of your data largely depends on the security of your own device and browser. By not uploading your files for core processing, we minimize the risk of data exposure during transmission.</p>
+
+            <h3>6. Future Tools & Policy Updates</h3>
+            <p>If we introduce new tools that *require* server-side processing (like potentially advanced PDF features), this policy will be updated to clearly explain what data is sent, how it's processed, and how it's stored or deleted. Your use of such new tools would be subject to the updated policy.</p>
+
+            <h3>7. Changes to This Policy</h3>
+            <p>We may update this Privacy Policy. We encourage you to review this page periodically. The "Last Updated" date at the top indicates the latest revision.</p>
+
+            <h3>8. Contact Us</h3>
+            <p>If you have questions about this Privacy Policy, please contact us (Provide a contact method here if this were a live site).</p>
+             </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 linktoQR.me - Free Online Tools. Processing occurs locally in your browser.</p>
+        <p><a href="#privacy" class="nav-link" data-page="privacy-policy-page">Privacy Policy</a> | </p>
+    </footer>
+
     <script>
-        const qrScanner = new QrScanner(
-            document.getElementById('scan-video'),
-            result => {
-                document.getElementById('scan-result').textContent = result;
-                document.getElementById('copy-result').style.display = 'inline-block';
-                qrScanner.stop();
-                document.getElementById('scan-video-container').style.display = 'none';
-            },
-            {
-                highlightScanRegion: true,
-                highlightCodeOutline: true,
-            }
-        );
+        // --- Utility Functions ---
+        const gebi = (id) => document.getElementById(id);
+        const qsel = (selector) => document.querySelector(selector);
+        const qselAll = (selector) => document.querySelectorAll(selector);
+        const RENDER_DELAY = 150; // Milliseconds delay for UI updates/renders
 
-        document.getElementById('scan-button').addEventListener('click', () => {
-            document.getElementById('scan-video-container').style.display = 'block';
-            qrScanner.start();
-        });
+        // Debounce function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        };
 
-        function scanQRCodeFromFile(fileInput) {
-            const file = fileInput.files[0];
-            if (!file) {
-                return;
-            }
+        function showLoader(loaderId) { gebi(loaderId).classList.remove('hidden'); }
+        function hideLoader(loaderId) { gebi(loaderId).classList.add('hidden'); }
+        function showStatus(statusId, message, isError = false) {
+            const el = gebi(statusId);
+            if(!el) return; // Element might not exist (e.g. if PDF tool is commented out)
+            el.textContent = message;
+            el.style.color = isError ? '#e74c3c' : 'var(--primary-color)';
+            el.classList.remove('hidden');
+        }
+         function hideStatus(statusId) {
+             const el = gebi(statusId);
+              if(!el) return;
+             el.textContent = '';
+             el.classList.add('hidden');
+         }
 
-            QrScanner.scanImage(file)
-                .then(result => {
-                    document.getElementById('scan-result').textContent = result;
-                    document.getElementById('copy-result').style.display = 'inline-block';
-                })
-                .catch(error => {
-                    document.getElementById('scan-result').textContent = `Error scanning QR code: ${error}`;
-                    document.getElementById('copy-result').style.display = 'none';
-                });
+
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0 || !bytes) return '0 Bytes';
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            const index = Math.max(0, i);
+            return parseFloat((bytes / Math.pow(k, index)).toFixed(dm)) + ' ' + sizes[index];
         }
 
-        function copyToClipboard() {
-            const resultText = document.getElementById('scan-result').textContent;
-            navigator.clipboard.writeText(resultText).then(() => {
-                alert('Text copied to clipboard!');
-            }).catch(err => {
-                console.error('Failed to copy text: ', err);
+         function dataURLtoBlob(dataurl) {
+            try {
+                var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+                while(n--){ u8arr[n] = bstr.charCodeAt(n); }
+                return new Blob([u8arr], {type:mime});
+            } catch (e) {
+                console.error("Error converting data URL to Blob:", e);
+                return null;
+            }
+        }
+
+        function setupDownloadLink(linkId, dataUrl, defaultFilename) {
+            const link = gebi(linkId);
+             if (!dataUrl) {
+                 link.classList.add('hidden');
+                 return;
+             }
+            link.href = dataUrl;
+            link.download = defaultFilename;
+            link.classList.remove('hidden');
+            link.style.opacity = '1';
+            link.style.pointerEvents = 'auto';
+            if (link.tagName === 'BUTTON' || link.classList.contains('download-button')) link.disabled = false; // Ensure styled links are enabled
+        }
+
+        function displayOutputDetails(detailsContainerId, details) {
+            const container = gebi(detailsContainerId);
+             if (!container) return;
+            let html = '';
+            for (const key in details) {
+                if (details[key] !== null && details[key] !== undefined && details[key] !== '') {
+                     let valueHtml = `<span>${details[key]}</span>`;
+                     if (key.toLowerCase().includes('size') || key.toLowerCase().includes('dimensions')) {
+                          if (key.toLowerCase().includes('new') || key.toLowerCase().includes('output')) {
+                              valueHtml = `<span class="highlight">${details[key]}</span>`;
+                          }
+                     }
+                     if (key.toLowerCase().includes('note') || key.toLowerCase().includes('adjustments')) { // Style notes differently
+                         valueHtml = `<span style="color: #e74c3c; font-style: italic;">${details[key]}</span>`;
+                     }
+                      html += `<p><strong>${key}:</strong> ${valueHtml}</p>`;
+                }
+            }
+            container.innerHTML = html;
+            container.classList.remove('hidden');
+        }
+
+        // --- Global State ---
+        const toolState = {
+            compressor: { originalDataUrl: null, originalFile: null, currentQuality: 0.8, currentDataUrl: null, imageElement: null },
+            resizer: { originalDataUrl: null, originalFile: null, currentDataUrl: null, imageElement: null, originalWidth: 0, originalHeight: 0 },
+            merger: { frontDataUrl: null, backDataUrl: null, frontFile: null, backFile: null, currentDataUrl: null, frontImageElement: null, backImageElement: null },
+            enhancer: { originalDataUrl: null, originalFile: null },
+            formatter: { originalDataUrl: null, originalFile: null, imageElement: null }
+        };
+
+        // --- Page Navigation & Scrolling ---
+        const navLinks = qselAll('.nav-link');
+        const pages = qselAll('.page');
+        const featureCards = qselAll('.feature-card');
+
+        function setActivePage(pageId) {
+            let targetPageElement = null;
+            pages.forEach(page => {
+                const isActive = page.id === pageId;
+                page.classList.toggle('active', isActive);
+                 if (isActive) {
+                    targetPageElement = page;
+                 }
+            });
+
+            navLinks.forEach(link => {
+                 link.classList.toggle('active', link.dataset.page === pageId);
+            });
+
+             if (targetPageElement) { // Only scroll if a valid page was found
+                 if (window.innerWidth <= 768) {
+                      setTimeout(() => {
+                         targetPageElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }, 50);
+                 } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                 }
+            }
+
+             try {
+                const currentUrl = new URL(window.location);
+                const newHash = '#' + pageId.replace('-page', '');
+                 if (currentUrl.hash !== newHash) { // Avoid unnecessary replaceState calls
+                    currentUrl.hash = newHash;
+                    history.replaceState(null, '', currentUrl);
+                }
+            } catch (e) {
+                console.warn("Could not update URL hash:", e);
+            }
+        }
+
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.dataset.page;
+                 if (gebi(pageId)) {
+                    setActivePage(pageId);
+                 }
+            });
+        });
+
+         featureCards.forEach(card => {
+             card.addEventListener('click', (e) => {
+                 const pageId = card.dataset.page;
+                  if (gebi(pageId)) {
+                     setActivePage(pageId);
+                  }
+             });
+         });
+
+         function loadInitialPage() {
+             const hash = window.location.hash.substring(1);
+             let pageIdToLoad = 'home-page';
+             if (hash) {
+                 const potentialId = hash + '-page';
+                 if (gebi(potentialId)) {
+                     pageIdToLoad = potentialId;
+                 }
+             }
+             setActivePage(pageIdToLoad);
+         }
+         window.addEventListener('load', loadInitialPage);
+         // No need for hashchange listener if replaceState is used and initial load handles hash
+
+        // --- QR Code Generator (with Debounce) ---
+        const qrTextInput = gebi('qr-text');
+        const qrCodeDisplay = gebi('qr-code-display');
+        const downloadQrBtn = gebi('download-qr-btn');
+        const qrOutputDetails = gebi('qr-output-details');
+        const qrLoader = gebi('qr-loader');
+        let qrCodeInstance = null;
+        let qrCanvas = null;
+
+        const generateQRCodeRealtime = () => {
+             const text = qrTextInput.value.trim();
+             downloadQrBtn.classList.add('hidden');
+             qrOutputDetails.classList.add('hidden');
+
+             if (!text) {
+                 qrCodeDisplay.innerHTML = '<p style="font-size:0.9em; color:#888;">Enter text or URL above</p>';
+                 hideLoader('qr-loader');
+                 return;
+             }
+
+             showLoader('qr-loader');
+             qrCodeDisplay.innerHTML = '';
+
+             setTimeout(() => {
+                 try {
+                     qrCodeInstance = new QRCode(qrCodeDisplay, {
+                         text: text,
+                         width: 180, // Match CSS size
+                         height: 180,
+                         colorDark: "#000000",
+                         colorLight: "#ffffff",
+                         correctLevel: QRCode.CorrectLevel.H
+                     });
+
+                     displayOutputDetails('qr-output-details', { 'Input Text': text });
+
+                     setTimeout(() => {
+                         qrCanvas = qrCodeDisplay.querySelector('canvas');
+                         const imgEl = qrCodeDisplay.querySelector('img');
+
+                         if (qrCanvas) {
+                             const dataUrl = qrCanvas.toDataURL('image/png');
+                             setupDownloadLink('download-qr-btn', dataUrl, 'qrcode.png');
+                         } else if (imgEl && imgEl.src.startsWith('data:image')) {
+                              setupDownloadLink('download-qr-btn', imgEl.src, 'qrcode.png');
+                         } else {
+                             console.warn("Could not find canvas or dataURL image for QR download.");
+                              downloadQrBtn.classList.add('hidden');
+                         }
+                          hideLoader('qr-loader');
+                     }, RENDER_DELAY);
+
+                 } catch (error) {
+                      console.error("Error generating QR Code:", error);
+                      qrCodeDisplay.innerHTML = '<p style="font-size:0.9em; color:#e74c3c;">Error generating QR code.</p>';
+                      hideLoader('qr-loader');
+                 }
+             }, 10);
+         };
+
+        const debouncedQRGenerator = debounce(generateQRCodeRealtime, 500);
+        qrTextInput.addEventListener('input', debouncedQRGenerator);
+
+
+       // --- Image Processing Core Function ---
+       function processImage(imageDataUrl, options = {}) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    const targetWidth = options.width || img.width;
+                    const targetHeight = options.height || img.height;
+                    const quality = options.quality !== undefined ? options.quality : 0.85;
+                    const mimeType = options.mimeType || 'image/jpeg';
+
+                    // Basic validation for dimensions
+                    if (targetWidth <= 0 || targetHeight <= 0 || isNaN(targetWidth) || isNaN(targetHeight)) {
+                        return reject(new Error('Invalid target dimensions for processing.'));
+                    }
+                    // Add canvas size limit check (e.g., 16 megapixels) to prevent crashes
+                    if (targetWidth * targetHeight > 16000000) {
+                         console.warn(`Canvas size (${targetWidth}x${targetHeight}) exceeds 16MP limit. Reducing.`);
+                         // Implement logic to scale down if needed, or reject
+                          return reject(new Error('Image dimensions too large for reliable browser processing.'));
+                    }
+
+
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+
+                    if (mimeType !== 'image/jpeg') {
+                         ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+                    } else {
+                         ctx.fillStyle = '#FFFFFF';
+                         ctx.fillRect(0, 0, canvas.width, canvas.height);
+                         ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+                    }
+
+                    const dataUrl = canvas.toDataURL(mimeType, quality);
+                    const blob = dataURLtoBlob(dataUrl);
+
+                     if (!blob) {
+                         return reject(new Error("Failed to create blob from canvas data."));
+                     }
+
+                    resolve({
+                        dataUrl: dataUrl,
+                        blob: blob,
+                        width: canvas.width,
+                        height: canvas.height
+                    });
+                };
+                 img.onerror = (err) => {
+                     console.error("Image load error in processImage:", err);
+                     reject(new Error('Error loading image for processing. Check file format or if it is corrupted.'));
+                 };
+                img.src = imageDataUrl;
             });
         }
 
-        function showPage(pageId) {
-            document.getElementById('home-container').style.display = 'none';
-            document.getElementById('generate-qr-container').style.display = 'none';
-            document.getElementById('scan-qr-container').style.display = 'none';
-            document.getElementById('terms-privacy-container').style.display = 'none';
-            document.getElementById('about-us-container').style.display = 'none';
-            document.getElementById('scan-video-container').style.display = 'none';
-            if (qrScanner.hasCamera) {
-                qrScanner.stop();
+
+        // --- Image Compressor (with Target Size) ---
+        const compressFileInput = gebi('compress-file');
+        const compressQualitySlider = gebi('compress-quality');
+        const compressQualityValue = gebi('compress-quality-value');
+        const compressPreview = gebi('compress-preview');
+        const compressLoader = gebi('compress-loader');
+        const downloadCompressBtn = gebi('download-compress-btn');
+        const compressTargetSizeInput = gebi('compress-target-size');
+        const compressTargetUnitSelect = gebi('compress-target-unit');
+        const compressTargetBtn = gebi('compress-target-btn');
+        const compressStatus = gebi('compress-status');
+        const compressNoPreview = gebi('compress-no-preview');
+
+
+        compressQualitySlider.addEventListener('input', () => {
+            const quality = parseFloat(compressQualitySlider.value).toFixed(2);
+            compressQualityValue.textContent = quality;
+            toolState.compressor.currentQuality = quality;
+            if (toolState.compressor.originalDataUrl) {
+                compressImageRealtime();
+            }
+        });
+
+         compressFileInput.addEventListener('change', (e) => {
+             const file = e.target.files[0];
+             if (file) {
+                 // Basic file type check (client-side, not foolproof)
+                 if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+                     alert('Invalid file type. Please upload JPG, PNG, or WEBP.');
+                     e.target.value = null; // Clear the input
+                     return;
+                 }
+                 // Basic file size check (e.g., 20MB limit)
+                 if (file.size > 20 * 1024 * 1024) {
+                      alert('File is too large (Max 20MB).');
+                      e.target.value = null;
+                      return;
+                 }
+
+                 toolState.compressor.originalFile = file;
+                 compressTargetBtn.disabled = false;
+                 compressPreview.classList.add('hidden');
+                 compressNoPreview.classList.add('hidden');
+                 downloadCompressBtn.classList.add('hidden');
+                 gebi('compress-output-details').classList.add('hidden');
+                 hideStatus('compress-status');
+
+                 const reader = new FileReader();
+                 reader.onload = (event) => {
+                      toolState.compressor.originalDataUrl = event.target.result;
+                      const img = new Image();
+                      img.onload = () => { toolState.compressor.imageElement = img; compressImageRealtime(); };
+                       img.onerror = () => { alert('Could not load image data. The file might be corrupted.'); hideStatus('compress-status'); }
+                      img.src = event.target.result;
+                 };
+                 reader.onerror = () => { alert('Error reading file.'); };
+                 reader.readAsDataURL(file);
+             } else {
+                 toolState.compressor.originalFile = null;
+                 toolState.compressor.originalDataUrl = null;
+                  toolState.compressor.imageElement = null;
+                 compressTargetBtn.disabled = true;
+                 compressPreview.classList.add('hidden');
+                 compressNoPreview.classList.remove('hidden');
+                 compressNoPreview.textContent = 'Upload an image to start.';
+                 hideStatus('compress-status');
+                 gebi('compress-output-details').classList.add('hidden');
+                 downloadCompressBtn.classList.add('hidden');
+             }
+         });
+
+        // Real-time update function based on quality slider
+        const compressImageRealtime = debounce(async () => {
+             if (!toolState.compressor.originalDataUrl || !toolState.compressor.imageElement) return;
+
+             showLoader('compress-loader');
+             compressPreview.classList.add('hidden');
+             compressNoPreview.classList.remove('hidden');
+             compressNoPreview.textContent = 'Processing...';
+             downloadCompressBtn.classList.add('hidden');
+             hideStatus('compress-status');
+
+             try {
+                 const quality = parseFloat(compressQualitySlider.value);
+                 let mimeType = 'image/jpeg';
+                 let extension = 'jpg';
+                  if (toolState.compressor.originalFile.type === 'image/webp') { mimeType = 'image/webp'; extension = 'webp'; }
+
+                 const result = await processImage(toolState.compressor.originalDataUrl, {
+                     quality: quality,
+                     mimeType: mimeType
+                 });
+
+                 toolState.compressor.currentDataUrl = result.dataUrl;
+
+                 compressPreview.src = result.dataUrl;
+                 compressPreview.classList.remove('hidden');
+                 compressNoPreview.classList.add('hidden');
+
+                 displayOutputDetails('compress-output-details', {
+                     'Original Size': formatBytes(toolState.compressor.originalFile.size),
+                     'Original Dimensions': `${toolState.compressor.imageElement.width} x ${toolState.compressor.imageElement.height}`,
+                     'Output Size': formatBytes(result.blob.size),
+                     'Dimensions': `${result.width} x ${result.height}`,
+                     'Quality Setting': quality.toFixed(2)
+                 });
+
+                 setupDownloadLink('download-compress-btn', result.dataUrl, `compressed_${toolState.compressor.originalFile.name.split('.')[0]}.${extension}`);
+
+             } catch (error) {
+                 console.error("Error during real-time compression:", error);
+                 showStatus('compress-status', `Error: ${error.message}`, true);
+                  compressNoPreview.textContent = 'Error loading preview.';
+             } finally {
+                 hideLoader('compress-loader');
+             }
+         }, 300);
+
+
+        // Function to compress towards a target size (Iterative)
+         async function compressToTargetSize(imageDataUrl, originalFile, targetBytes) {
+             showLoader('compress-loader');
+             compressTargetBtn.disabled = true;
+             compressPreview.classList.add('hidden');
+             compressNoPreview.classList.remove('hidden');
+             compressNoPreview.textContent = 'Compressing to target size...';
+             downloadCompressBtn.classList.add('hidden');
+             showStatus('compress-status', `Attempting to compress below ${formatBytes(targetBytes)}...`);
+
+             const MAX_ITERATIONS = 12; // Increased iterations slightly
+             const MIN_QUALITY = 0.05; // Minimum quality limit
+             let low = MIN_QUALITY; // Binary search boundaries
+             let high = 1.0;
+             let bestResult = null; // Store best result found under target
+             let lastResultOverTarget = null; // Store smallest result over target
+             let achievedTarget = false;
+
+             let mimeType = 'image/jpeg';
+             let extension = 'jpg';
+             if (originalFile.type === 'image/webp' && originalFile.type !== 'image/png') {
+                 mimeType = 'image/webp'; extension = 'webp'; // Use WebP if original is WebP (and not PNG)
+             }
+
+             try {
+                 // Attempt binary search for optimal quality
+                 for (let i = 0; i < MAX_ITERATIONS; i++) {
+                     let currentQuality = (low + high) / 2;
+                     console.log(`Iteration ${i + 1}: Trying quality ${currentQuality.toFixed(3)} [${low.toFixed(3)}-${high.toFixed(3)}]`);
+
+                     const result = await processImage(imageDataUrl, { quality: currentQuality, mimeType: mimeType });
+                     const currentSize = result.blob.size;
+                     console.log(`   Result size: ${formatBytes(currentSize)}`);
+
+                     if (currentSize <= targetBytes) {
+                         // Achieved target or below - this is a potential candidate
+                         bestResult = result; // Store this good result
+                          achievedTarget = true;
+                         // We might do better, try slightly higher quality
+                         low = currentQuality;
+                     } else {
+                         // Too large, try lower quality
+                         lastResultOverTarget = result; // Keep track of the smallest size that was too big
+                         high = currentQuality;
+                     }
+
+                     // Stop if range is very small
+                     if ((high - low) < 0.01) {
+                         console.log("Binary search range converged.");
+                         break;
+                     }
+                 }
+
+                 // After loop, decide which result to use
+                 if (!bestResult && lastResultOverTarget) {
+                      // Never got under target, use the smallest result we found (which was over target)
+                      // OR, optionally, fail here. Let's use the smallest found for now.
+                      bestResult = lastResultOverTarget;
+                      showStatus('compress-status', `Could not reach target size. Smallest achieved: ${formatBytes(bestResult.blob.size)}.`, true);
+                 } else if (bestResult) {
+                      showStatus('compress-status', `Success! Compressed to ${formatBytes(bestResult.blob.size)}.`);
+                 } else {
+                       // No results at all? Should not happen with processImage error handling
+                       throw new Error("Compression failed to produce any result.");
+                 }
+
+
+                 // --- Update UI with the best result found ---
+                 const finalQuality = bestResult === lastResultOverTarget ? high : low; // Estimate final quality based on boundaries
+
+                 toolState.compressor.currentDataUrl = bestResult.dataUrl;
+                 compressPreview.src = bestResult.dataUrl;
+                 compressPreview.classList.remove('hidden');
+                 compressNoPreview.classList.add('hidden');
+
+                 displayOutputDetails('compress-output-details', {
+                     'Original Size': formatBytes(originalFile.size),
+                     'Original Dimensions': toolState.compressor.imageElement ? `${toolState.compressor.imageElement.width} x ${toolState.compressor.imageElement.height}` : 'N/A',
+                     'Output Size': formatBytes(bestResult.blob.size),
+                     'Dimensions': `${bestResult.width} x ${bestResult.height}`,
+                     'Final Quality': finalQuality.toFixed(2) + (achievedTarget ? '' : ' (approx)')
+                 });
+                 setupDownloadLink('download-compress-btn', bestResult.dataUrl, `compressed_${originalFile.name.split('.')[0]}.${extension}`);
+
+                 compressQualitySlider.value = finalQuality;
+                 compressQualityValue.textContent = finalQuality.toFixed(2);
+
+             } catch (error) {
+                 console.error("Error during target size compression:", error);
+                 showStatus('compress-status', `Error: ${error.message}`, true);
+                 compressPreview.classList.add('hidden');
+                 compressNoPreview.classList.remove('hidden');
+                 compressNoPreview.textContent = 'Error during compression.';
+             } finally {
+                 hideLoader('compress-loader');
+                 compressTargetBtn.disabled = false;
+             }
+         }
+
+         compressTargetBtn.addEventListener('click', () => {
+             if (!toolState.compressor.originalDataUrl || !toolState.compressor.originalFile) {
+                  alert('Please upload an image first.');
+                  return;
+             }
+             const sizeValue = parseFloat(compressTargetSizeInput.value);
+             const sizeUnit = compressTargetUnitSelect.value;
+
+             if (isNaN(sizeValue) || sizeValue <= 0) {
+                  alert('Please enter a valid positive target size.');
+                  return;
+             }
+
+             let targetBytes = sizeValue;
+             if (sizeUnit === 'KB') { targetBytes *= 1024; }
+             else if (sizeUnit === 'MB') { targetBytes *= 1024 * 1024; }
+
+             // Add a lower bound check (e.g., cannot target less than 1KB)
+             if (targetBytes < 100) {
+                 alert("Target size too small. Please enter a larger value (e.g., at least 1 KB).");
+                 return;
+             }
+
+
+             compressToTargetSize(toolState.compressor.originalDataUrl, toolState.compressor.originalFile, targetBytes);
+         });
+
+
+        // --- Image Resizer (with Real-time updates) ---
+        const resizeFileInput = gebi('resize-file');
+        const resizeWidthInput = gebi('resize-width');
+        const resizeHeightInput = gebi('resize-height');
+        const resizeAspectRatioCheckbox = gebi('resize-aspect-ratio');
+        const resizeQualitySlider = gebi('resize-quality');
+        const resizeQualityValue = gebi('resize-quality-value');
+        const resizeBtn = gebi('resize-btn');
+        const resizePreview = gebi('resize-preview');
+        const resizeLoader = gebi('resize-loader');
+        const downloadResizeBtn = gebi('download-resize-btn');
+        const resizeNoPreview = gebi('resize-no-preview');
+
+
+        resizeQualitySlider.addEventListener('input', () => {
+             resizeQualityValue.textContent = parseFloat(resizeQualitySlider.value).toFixed(2);
+             if (toolState.resizer.currentDataUrl) { resizeImageRealtime(); }
+         });
+
+         resizeFileInput.addEventListener('change', (e) => {
+             const file = e.target.files[0];
+             if (file) {
+                 // Basic file type check
+                 if (!file.type.startsWith('image/')) {
+                     alert('Invalid file type. Please upload an image.');
+                     e.target.value = null; return;
+                 }
+                  // Basic file size check
+                 if (file.size > 20 * 1024 * 1024) {
+                      alert('File is too large (Max 20MB).');
+                      e.target.value = null; return;
+                 }
+
+                 toolState.resizer.originalFile = file;
+                 resizeBtn.disabled = false;
+                 resizePreview.classList.add('hidden');
+                 resizeNoPreview.classList.remove('hidden');
+                 resizeNoPreview.textContent = 'Enter dimensions and click Resize.';
+                 downloadResizeBtn.classList.add('hidden');
+                 gebi('resize-output-details').classList.add('hidden');
+
+                 const reader = new FileReader();
+                 reader.onload = (event) => {
+                      toolState.resizer.originalDataUrl = event.target.result;
+                      const img = new Image();
+                      img.onload = () => {
+                          toolState.resizer.originalWidth = img.width;
+                          toolState.resizer.originalHeight = img.height;
+                          toolState.resizer.imageElement = img;
+                           // Pre-fill width for convenience?
+                           // resizeWidthInput.value = img.width;
+                           // handleAspectRatio('width'); // Trigger height update
+                      };
+                      img.onerror = () => { alert('Could not load image data.'); }
+                      img.src = event.target.result;
+                 };
+                 reader.onerror = () => { alert('Error reading file.'); };
+                 reader.readAsDataURL(file);
+             } else {
+                 toolState.resizer.originalFile = null; toolState.resizer.originalDataUrl = null;
+                 toolState.resizer.imageElement = null; toolState.resizer.originalWidth = 0; toolState.resizer.originalHeight = 0;
+                 resizeBtn.disabled = true; resizePreview.classList.add('hidden');
+                 resizeNoPreview.classList.remove('hidden'); resizeNoPreview.textContent = 'Upload an image to start.';
+                 gebi('resize-output-details').classList.add('hidden'); downloadResizeBtn.classList.add('hidden');
+             }
+         });
+
+         const handleAspectRatio = (changedInput) => {
+             if (!resizeAspectRatioCheckbox.checked || !toolState.resizer.originalWidth || !toolState.resizer.originalHeight) return;
+
+             const widthInput = resizeWidthInput;
+             const heightInput = resizeHeightInput;
+             const originalRatio = toolState.resizer.originalWidth / toolState.resizer.originalHeight;
+
+             if (changedInput === 'width') {
+                 const newWidth = parseInt(widthInput.value);
+                 if (!isNaN(newWidth) && newWidth > 0) heightInput.value = Math.round(newWidth / originalRatio);
+                 else if (widthInput.value === '') heightInput.value = '';
+             } else if (changedInput === 'height') {
+                 const newHeight = parseInt(heightInput.value);
+                 if (!isNaN(newHeight) && newHeight > 0) widthInput.value = Math.round(newHeight * originalRatio);
+                 else if (heightInput.value === '') widthInput.value = '';
+             }
+             if (toolState.resizer.currentDataUrl) resizeImageRealtime();
+         };
+
+         resizeWidthInput.addEventListener('input', () => handleAspectRatio('width'));
+         resizeHeightInput.addEventListener('input', () => handleAspectRatio('height'));
+         resizeAspectRatioCheckbox.addEventListener('change', () => { handleAspectRatio('width'); });
+
+         const performResize = async (isInitialClick = false) => {
+             if (!toolState.resizer.originalDataUrl) {
+                 if (isInitialClick) alert('Please upload an image first.'); return;
+             }
+             const targetWidth = parseInt(resizeWidthInput.value);
+             const targetHeight = parseInt(resizeHeightInput.value);
+
+             if (isNaN(targetWidth) || isNaN(targetHeight) || targetWidth <= 0 || targetHeight <= 0) {
+                 if (isInitialClick) alert('Please enter valid positive numbers for width and height.'); return;
+             }
+
+             showLoader('resize-loader');
+             if (isInitialClick) resizeBtn.disabled = true;
+             resizePreview.classList.add('hidden');
+             resizeNoPreview.classList.remove('hidden'); resizeNoPreview.textContent = 'Resizing...';
+             downloadResizeBtn.classList.add('hidden');
+
+             try {
+                 const quality = parseFloat(resizeQualitySlider.value);
+                 let mimeType = 'image/jpeg'; let extension = 'jpg';
+                  if (toolState.resizer.originalFile.type === 'image/png') { mimeType = 'image/png'; extension = 'png'; }
+                  if (toolState.resizer.originalFile.type === 'image/webp') { mimeType = 'image/webp'; extension = 'webp'; }
+
+                 const result = await processImage(toolState.resizer.originalDataUrl, {
+                     width: targetWidth, height: targetHeight, quality: quality, mimeType: mimeType
+                 });
+
+                 toolState.resizer.currentDataUrl = result.dataUrl;
+
+                 resizePreview.src = result.dataUrl;
+                 resizePreview.classList.remove('hidden'); resizeNoPreview.classList.add('hidden');
+
+                 displayOutputDetails('resize-output-details', {
+                      'Original Size': formatBytes(toolState.resizer.originalFile.size),
+                      'Original Dimensions': `${toolState.resizer.originalWidth} x ${toolState.resizer.originalHeight}`,
+                      'New Size': formatBytes(result.blob.size),
+                      'New Dimensions': `${result.width} x ${result.height}`
+                 });
+                 setupDownloadLink('download-resize-btn', result.dataUrl, `resized_${toolState.resizer.originalFile.name.split('.')[0]}.${extension}`);
+
+             } catch (error) {
+                 console.error("Error during resize:", error);
+                 resizeNoPreview.textContent = `Error: ${error.message}`;
+             } finally {
+                 hideLoader('resize-loader');
+                 if (isInitialClick) resizeBtn.disabled = false;
+             }
+         };
+
+        const resizeImageRealtime = debounce(() => { performResize(false); }, 400);
+
+        // Removed separate listeners, handled by handleAspectRatio now
+        // resizeWidthInput.addEventListener('input', resizeImageRealtime);
+        // resizeHeightInput.addEventListener('input', resizeImageRealtime);
+        resizeQualitySlider.addEventListener('input', resizeImageRealtime);
+        resizeBtn.addEventListener('click', () => performResize(true));
+
+
+         // --- ID Card Merger (with Real-time Spacing) ---
+         const idFrontFile = gebi('id-front-file');
+         const idBackFile = gebi('id-back-file');
+         const idSpacingSlider = gebi('id-spacing');
+         const idSpacingValue = gebi('id-spacing-value');
+         const mergeIdBtn = gebi('merge-id-btn');
+         const mergeLoader = gebi('merge-loader');
+         const mergePreview = gebi('merge-preview');
+         const idMergerCanvas = gebi('id-merger-canvas');
+         const downloadMergeBtn = gebi('download-merge-btn');
+         const idOutputFormatSelect = gebi('id-output-format');
+         const mergeNoPreview = gebi('merge-no-preview');
+
+
+         function checkMergeReady() {
+             mergeIdBtn.disabled = !(toolState.merger.frontImageElement?.complete && toolState.merger.backImageElement?.complete);
+         }
+
+         const handleIdFileChange = (file, type) => {
+              const isFront = type === 'front';
+              const fileState = isFront ? toolState.merger.frontFile : toolState.merger.backFile;
+              const dataUrlState = isFront ? toolState.merger.frontDataUrl : toolState.merger.backDataUrl;
+              const imageElementState = isFront ? toolState.merger.frontImageElement : toolState.merger.backImageElement;
+              const otherImageElementState = isFront ? toolState.merger.backImageElement : toolState.merger.frontImageElement;
+
+
+             if (file) {
+                 // Basic file type/size checks
+                 if (!file.type.startsWith('image/')) { alert(`Invalid file type for ${type} image.`); e.target.value = null; return; }
+                 if (file.size > 10 * 1024 * 1024) { alert(`${type} file is too large (Max 10MB).`); e.target.value = null; return; }
+
+                 const reader = new FileReader();
+                 reader.onload = (e) => {
+                      const dataUrl = e.target.result;
+                      const img = new Image();
+                      img.onload = () => {
+                          if (isFront) {
+                              toolState.merger.frontFile = file;
+                              toolState.merger.frontDataUrl = dataUrl;
+                              toolState.merger.frontImageElement = img;
+                          } else {
+                              toolState.merger.backFile = file;
+                              toolState.merger.backDataUrl = dataUrl;
+                              toolState.merger.backImageElement = img;
+                          }
+                           checkMergeReady(); // Check if both images are now loaded
+                      };
+                      img.onerror = () => { alert(`Could not load ${type} image data.`); }
+                      img.src = dataUrl;
+
+                      // Reset UI for new upload
+                      mergePreview.classList.add('hidden');
+                      mergeNoPreview.classList.remove('hidden');
+                      mergeNoPreview.textContent = 'Click Merge Images when both are uploaded.';
+                      downloadMergeBtn.classList.add('hidden');
+                      gebi('merge-output-details').classList.add('hidden');
+                      toolState.merger.currentDataUrl = null;
+                 };
+                 reader.onerror = () => { alert(`Error reading ${type} file.`); }
+                 reader.readAsDataURL(file);
+             } else {
+                  if (isFront) { toolState.merger.frontFile = null; toolState.merger.frontDataUrl = null; toolState.merger.frontImageElement = null; }
+                  else { toolState.merger.backFile = null; toolState.merger.backDataUrl = null; toolState.merger.backImageElement = null; }
+                  checkMergeReady(); // Update button state
+                  // Reset UI partially
+                   mergeNoPreview.textContent = 'Upload both images to start.';
+                   downloadMergeBtn.classList.add('hidden');
+                   gebi('merge-output-details').classList.add('hidden');
+             }
+         };
+
+         idFrontFile.addEventListener('change', (e) => handleIdFileChange(e.target.files[0], 'front'));
+         idBackFile.addEventListener('change', (e) => handleIdFileChange(e.target.files[0], 'back'));
+
+         const performMerge = async (isInitialClick = false) => {
+              if (!toolState.merger.frontImageElement?.complete || !toolState.merger.backImageElement?.complete) {
+                  if (isInitialClick) alert('Please ensure both images are uploaded and loaded correctly.');
+                  return;
+              }
+
+              showLoader('merge-loader');
+             if (isInitialClick) mergeIdBtn.disabled = true;
+              mergePreview.classList.add('hidden');
+              mergeNoPreview.classList.remove('hidden'); mergeNoPreview.textContent = 'Merging...';
+              downloadMergeBtn.classList.add('hidden');
+
+              const spacing = parseInt(idSpacingSlider.value) || 0;
+              const outputMimeType = idOutputFormatSelect.value;
+              const extension = outputMimeType.split('/')[1] || 'jpg';
+
+              try {
+                  const imgFront = toolState.merger.frontImageElement;
+                  const imgBack = toolState.merger.backImageElement;
+
+                  const canvas = idMergerCanvas;
+                  const ctx = canvas.getContext('2d');
+
+                  const canvasWidth = Math.max(imgFront.width, imgBack.width);
+                  const canvasHeight = imgFront.height + imgBack.height + spacing;
+
+                   // Add canvas size check
+                  if (canvasWidth * canvasHeight > 16000000) {
+                       throw new Error("Combined image dimensions too large for reliable processing.");
+                  }
+
+
+                  canvas.width = canvasWidth; canvas.height = canvasHeight;
+
+                  ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+                  ctx.drawImage(imgFront, (canvasWidth - imgFront.width) / 2, 0);
+                  ctx.drawImage(imgBack, (canvasWidth - imgBack.width) / 2, imgFront.height + spacing);
+
+                  const dataUrl = canvas.toDataURL(outputMimeType, 0.9);
+                  const blob = dataURLtoBlob(dataUrl);
+                   if (!blob) throw new Error("Failed to create blob from merged canvas.");
+
+                  toolState.merger.currentDataUrl = dataUrl;
+
+                  mergePreview.src = dataUrl;
+                  mergePreview.classList.remove('hidden'); mergeNoPreview.classList.add('hidden');
+
+                  displayOutputDetails('merge-output-details', {
+                      'Front Size': formatBytes(toolState.merger.frontFile?.size),
+                      'Back Size': formatBytes(toolState.merger.backFile?.size),
+                      'Output Size': formatBytes(blob.size),
+                      'Output Dimensions': `${canvas.width} x ${canvas.height}`
+                  });
+                  setupDownloadLink('download-merge-btn', dataUrl, `merged_id.${extension}`);
+
+              } catch (error) {
+                  console.error("Error during merge:", error);
+                   mergeNoPreview.textContent = `Error: ${error.message}`;
+              } finally {
+                   hideLoader('merge-loader');
+                   // Re-enable button based on image readiness, not just if it was initial click
+                   checkMergeReady();
+              }
+          };
+
+         const mergeImageRealtimeSpacing = debounce(() => {
+              if (toolState.merger.currentDataUrl) { performMerge(false); }
+          }, 200);
+
+         idSpacingSlider.addEventListener('input', () => {
+             idSpacingValue.textContent = idSpacingSlider.value;
+             mergeImageRealtimeSpacing();
+         });
+         idOutputFormatSelect.addEventListener('change', () => {
+              if (toolState.merger.currentDataUrl) { performMerge(false); }
+         });
+         mergeIdBtn.addEventListener('click', () => performMerge(true));
+
+
+         // --- Image Format Converter ---
+         const formatFileInput = gebi('format-file');
+         const formatOutputSelect = gebi('format-output');
+         const convertFormatBtn = gebi('convert-format-btn');
+         const formatLoader = gebi('format-loader');
+         const formatPreview = gebi('format-preview');
+         const downloadFormatBtn = gebi('download-format-btn');
+         const formatNoPreview = gebi('format-no-preview');
+
+
+         formatFileInput.addEventListener('change', (e) => {
+             const file = e.target.files[0];
+             if (file) {
+                  if (!file.type.startsWith('image/')) { alert('Invalid file type. Please upload an image.'); e.target.value = null; return; }
+                  if (file.size > 20 * 1024 * 1024) { alert('File is too large (Max 20MB).'); e.target.value = null; return; }
+
+                 toolState.formatter.originalFile = file;
+                 convertFormatBtn.disabled = false;
+                 formatPreview.classList.add('hidden'); formatNoPreview.classList.remove('hidden');
+                 formatNoPreview.textContent = 'Select output format and click Convert.';
+                 downloadFormatBtn.classList.add('hidden'); gebi('format-output-details').classList.add('hidden');
+
+                 const reader = new FileReader();
+                 reader.onload = (event) => {
+                     toolState.formatter.originalDataUrl = event.target.result;
+                      const img = new Image();
+                      img.onload = () => { toolState.formatter.imageElement = img; };
+                      img.onerror = () => { alert('Could not load image data.'); }
+                      img.src = event.target.result;
+                 };
+                 reader.onerror = () => { alert('Error reading file.'); }
+                 reader.readAsDataURL(file);
+             } else {
+                  toolState.formatter.originalFile = null; toolState.formatter.originalDataUrl = null; toolState.formatter.imageElement = null;
+                 convertFormatBtn.disabled = true; formatPreview.classList.add('hidden');
+                 formatNoPreview.classList.remove('hidden'); formatNoPreview.textContent = 'Upload an image to start.';
+                 gebi('format-output-details').classList.add('hidden'); downloadFormatBtn.classList.add('hidden');
+             }
+         });
+
+        convertFormatBtn.addEventListener('click', async () => {
+            if (!toolState.formatter.originalDataUrl || !toolState.formatter.originalFile || !toolState.formatter.imageElement?.complete) {
+                 alert("Please upload an image and wait for it to load."); return;
             }
 
-            if (pageId === 'home') {
-                document.getElementById('home-container').style.display = 'block';
-            } else if (pageId === 'generate-qr') {
-                document.getElementById('generate-qr-container').style.display = 'block';
-            } else if (pageId === 'scan-qr') {
-                document.getElementById('scan-qr-container').style.display = 'block';
-                document.getElementById('scan-result').textContent = '';
-                document.getElementById('copy-result').style.display = 'none';
-            } else if (pageId === 'terms-privacy') {
-                document.getElementById('terms-privacy-container').style.display = 'block';
-            } else if (pageId === 'about-us') {
-                document.getElementById('about-us-container').style.display = 'block';
+            const targetMimeType = formatOutputSelect.value;
+            const extension = targetMimeType.split('/')[1] || 'jpg';
+
+            showLoader('format-loader'); convertFormatBtn.disabled = true;
+            formatPreview.classList.add('hidden'); formatNoPreview.classList.remove('hidden'); formatNoPreview.textContent = 'Converting...';
+            downloadFormatBtn.classList.add('hidden');
+
+            try {
+                 const result = await processImage(toolState.formatter.originalDataUrl, {
+                      mimeType: targetMimeType,
+                      quality: 0.9 // Use a default quality for JPEG/WEBP
+                 });
+
+                 formatPreview.src = result.dataUrl;
+                 formatPreview.classList.remove('hidden'); formatNoPreview.classList.add('hidden');
+
+                 displayOutputDetails('format-output-details', {
+                     'Original Size': formatBytes(toolState.formatter.originalFile.size),
+                     'Original Format': toolState.formatter.originalFile.type || 'N/A',
+                     'New Size': formatBytes(result.blob.size),
+                     'New Format': targetMimeType
+                 });
+                 setupDownloadLink('download-format-btn', result.dataUrl, `converted_${toolState.formatter.originalFile.name.split('.')[0]}.${extension}`);
+
+            } catch (error) {
+                 console.error("Error during format conversion:", error);
+                  formatNoPreview.textContent = `Error: ${error.message}`;
+            } finally {
+                hideLoader('format-loader'); convertFormatBtn.disabled = false;
             }
-        }
+        });
 
-        function generateQRCode() {
-            const link = document.getElementById('qr-link').value;
-            const qrCodeOutput = document.getElementById('qrcode-output');
-            const linkError = document.getElementById('link-error');
-            qrCodeOutput.innerHTML = '';
-            linkError.textContent = '';
 
-            const validFormats = [
-                /^www\.[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}(\/.*)?$/,
-                /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}(\/.*)?$/,
-                /^https?:\/\/www\.[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}(\/.*)?$/
-            ];
+         // --- Image Enhancer (Basic CSS Filter Preview - Real-time) ---
+         const enhanceFileInput = gebi('enhance-file');
+         const enhancePreview = gebi('enhance-preview');
+         const enhanceBrightnessSlider = gebi('enhance-brightness');
+         const enhanceContrastSlider = gebi('enhance-contrast');
+         const enhanceSaturateSlider = gebi('enhance-saturate');
+         const enhanceBrightnessValue = gebi('enhance-brightness-value');
+         const enhanceContrastValue = gebi('enhance-contrast-value');
+         const enhanceSaturateValue = gebi('enhance-saturate-value');
+         const downloadEnhanceBtn = gebi('download-enhance-btn');
+         const enhanceNoPreview = gebi('enhance-no-preview');
 
-            let isValid = false;
-            for (const format of validFormats) {
-                if (format.test(link)) {
-                    isValid = true;
-                    break;
-                }
-            }
+         function applyEnhanceFilters() {
+             if (!enhancePreview.classList.contains('hidden')) {
+                 const brightness = enhanceBrightnessSlider.value / 100;
+                 const contrast = enhanceContrastSlider.value / 100;
+                 const saturate = enhanceSaturateSlider.value / 100;
+                 enhancePreview.style.filter = `brightness(${brightness}) contrast(${contrast}) saturate(${saturate})`;
+                 enhanceBrightnessValue.textContent = enhanceBrightnessSlider.value;
+                 enhanceContrastValue.textContent = enhanceContrastSlider.value;
+                 enhanceSaturateValue.textContent = enhanceSaturateSlider.value;
+             }
+         }
 
-            if (!isValid) {
-                linkError.textContent = 'Invalid link format. Please use formats like www.something.com, something.com, or https://www.something.com';
-                return;
-            }
+         enhanceFileInput.addEventListener('change', (e) => {
+              const file = e.target.files[0];
+              if (file) {
+                   if (!file.type.startsWith('image/')) { alert('Invalid file type.'); e.target.value = null; return; }
+                   if (file.size > 15 * 1024 * 1024) { alert('File too large (Max 15MB for Enhancer).'); e.target.value = null; return; }
 
-            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}`;
-            const downloadLink = `<a id="download-qr" href="${qrCodeUrl}" download="qrcode.png">Download QR Code</a>`;
-            qrCodeOutput.innerHTML = `<img src="${qrCodeUrl}" alt="QR Code"><br>${downloadLink}`;
-        }
+                 toolState.enhancer.originalFile = file;
+                 const reader = new FileReader();
+                 reader.onload = (event) => {
+                     toolState.enhancer.originalDataUrl = event.target.result;
+                     enhancePreview.src = toolState.enhancer.originalDataUrl;
+                     enhancePreview.classList.remove('hidden'); enhanceNoPreview.classList.add('hidden');
+                     enhancePreview.style.filter = 'none';
+                     enhanceBrightnessSlider.value = 100; enhanceContrastSlider.value = 100; enhanceSaturateSlider.value = 100;
+                     applyEnhanceFilters();
 
-        // Initial state: Show only the home page
-        showPage('home');
+                     const img = new Image();
+                     img.onload = () => {
+                         displayOutputDetails('enhance-output-details', {
+                             'Original Size': formatBytes(file.size),
+                             'Original Dimensions': `${img.width} x ${img.height}`,
+                             'Note': 'Adjustments preview-only.'
+                         });
+                         setupDownloadLink('download-enhance-btn', toolState.enhancer.originalDataUrl, file.name);
+                     };
+                      img.onerror = () => { /* Handle error if needed */ }
+                     img.src = toolState.enhancer.originalDataUrl;
+                 };
+                 reader.onerror = () => { alert('Error reading file.'); }
+                 reader.readAsDataURL(file);
+             } else {
+                  toolState.enhancer.originalFile = null; toolState.enhancer.originalDataUrl = null;
+                 enhancePreview.classList.add('hidden'); enhanceNoPreview.classList.remove('hidden'); enhanceNoPreview.textContent = 'Upload an image to start.';
+                 gebi('enhance-output-details').classList.add('hidden'); downloadEnhanceBtn.classList.add('hidden');
+             }
+         });
+
+         [enhanceBrightnessSlider, enhanceContrastSlider, enhanceSaturateSlider].forEach(slider => {
+             slider.addEventListener('input', applyEnhanceFilters);
+         });
+
+
+        console.log("linktoQR.me Tools Initialized.");
+
     </script>
-    <amp-ad width="100vw" height="320"
-     type="adsense"
-     data-ad-client="ca-pub-6126558809611102"
-     data-ad-slot="6303312177"
-     data-auto-format="rspv"
-     data-full-width="">
-  <div overflow=""></div>
-</amp-ad>
+
 </body>
 </html>
